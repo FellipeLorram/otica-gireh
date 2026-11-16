@@ -1,55 +1,39 @@
-# Fotos necessárias: Ótica Gireh
+# Fotos necessárias: Ótica Girêh
 
-Todas as fotos precisam ser reais, das lojas e da equipe. Celular serve, na horizontal ou vertical conforme indicado, com boa luz e lente limpa. Cada código corresponde a um espaço já reservado no site.
+Esta lista vem dos espaços de imagem que existem hoje no site (componente `EspacoImagem`). Cada código abaixo é um lugar real numa página: quando a foto chega, ela entra no lugar do espaço reservado, sem mexer no layout.
 
-**Como enviar:** um arquivo por foto, com o código no nome (ex.: `F01-fachada-caju.jpg`). Tamanho mínimo de 2000px no lado maior.
+**Como enviar:** um arquivo por foto, com o código no nome (`F01-fachada-caju.jpg`). Celular serve, com boa luz e lente limpa. Mínimo de 2000px no lado maior. Quem aparecer na foto precisa autorizar.
 
-## Marca
+## Prioridade 1: a Girêh Caju
+
+O foco do trabalho agora é a Caju. Com estas cinco fotos, a Início, a página da Caju e a do exame ficam prontas.
+
+| Código | O quê | Formato | Onde aparece |
+|---|---|---|---|
+| F01 | Fachada da Girêh Caju, de frente, de dia, porta aberta | Vertical 4:5 | Início, /lojas/, página da Caju |
+| F04 | Atendimento no balcão: alguém da equipe com um cliente | Quadrada 1:1 | Início (foto grande) |
+| F09 | Expositor de armações na parede, vista geral | Horizontal 3:2 | Início |
+| F07 | O cantinho do exame, com o equipamento, sem ninguém | Vertical 4:5 | Exame de vista |
+| F14 | Interior da Caju, da porta para dentro | Horizontal 3:2 | Página da Caju |
+
+## Prioridade 2: as outras duas lojas
+
+Só para completar as páginas da Vila do Pinheiro e da Baixa do Sapateiro. Enquanto não chegarem, essas páginas seguem com o espaço reservado.
+
 | Código | O quê | Formato |
 |---|---|---|
-| L01 | Logo oficial em vetor (SVG, PDF ou AI). Se só tiver PNG, mandar o maior possível com fundo transparente | — |
-| L02 | Logo em versão branca (para usar sobre o azul), se existir | — |
+| F02 | Fachada da Girêh Pinheiro, de frente, de dia | Vertical 4:5 |
+| F03 | Fachada da Girêh Baixa do Sapateiro, de frente, de dia | Vertical 4:5 |
+| F15 | Interior da Pinheiro, da porta para dentro | Horizontal 3:2 |
+| F16 | Interior da Baixa do Sapateiro, da porta para dentro | Horizontal 3:2 |
 
-## Fachadas (uma por unidade)
-| Código | O quê | Formato |
-|---|---|---|
-| F01 | Fachada da Gireh Caju, de frente, de dia, porta aberta | Vertical 4:5 |
-| F02 | Fachada da Gireh Pinheiro, de frente, de dia | Vertical 4:5 |
-| F03 | Fachada da Gireh Baixa do Sapateiro, de frente, de dia | Vertical 4:5 |
+## O que saiu da lista
 
-## Pessoas e atendimento
-| Código | O quê | Formato |
-|---|---|---|
-| F04 | Equipe atendendo um cliente no balcão (com autorização de quem aparecer) | Quadrada 1:1 |
-| F05 | Retrato da equipe de cada loja, juntos, na frente da vitrine | Horizontal 3:2 |
-| F06 | Mãos ajustando uma armação no rosto de um cliente (close) | Vertical 4:5 |
+- **Logo (L01, L02):** não é mais necessário. O logo foi redesenhado em vetor dentro do próprio site, a partir do original, e já funciona em claro e escuro.
+- **Fotos de lente e armação (F10 a F13):** a página Óculos e lentes usa as suas fotos e vídeos do Vizum, já otimizados em `public/midia/oculos/`.
+- **F05, F06, F08:** retrato da equipe, close do ajuste e exame acontecendo. Hoje não há espaço para elas em nenhuma página. Se você tiver, guarde: servem se abrirmos uma seção sobre a loja ou uma página "Sobre".
+- **P01, P02 (prints do Google e do Instagram):** eram para pesquisa, não para o site. O que falta confirmar virou pergunta direta, não print.
 
-## Exame de vista
-| Código | O quê | Formato |
-|---|---|---|
-| F07 | A sala ou o cantinho do exame, com o equipamento | Vertical 4:5 |
-| F08 | Exame acontecendo (cliente no equipamento, de lado, com autorização) | Horizontal 3:2 |
+## Se a foto demorar
 
-## Produtos
-| Código | O quê | Formato |
-|---|---|---|
-| F09 | Expositor de armações na parede (vista geral) | Horizontal 3:2 |
-| F10 | 5 a 8 armações sobre o balcão, de cima, fundo liso | Quadrada 1:1 |
-| F11 | Óculos de sol no expositor | Quadrada 1:1 |
-| F12 | Armações infantis (se vendem) | Quadrada 1:1 |
-| F13 | Óculos pronto entregue no estojo/saquinho da Gireh | Quadrada 1:1 |
-
-## Interior (uma por unidade, se possível)
-| Código | O quê | Formato |
-|---|---|---|
-| F14 | Interior da Caju, vista da porta para dentro | Horizontal 3:2 |
-| F15 | Interior da Pinheiro | Horizontal 3:2 |
-| F16 | Interior da Baixa do Sapateiro | Horizontal 3:2 |
-
-## Prova social (opcional, mas ajuda muito)
-| Código | O quê | Formato |
-|---|---|---|
-| P01 | Prints das avaliações do Google de cada unidade (nota e comentários) | print |
-| P02 | Prints da bio dos dois Instagrams | print |
-
-**Prioridade para a primeira versão:** L01, F01, F02, F03, F04, F07 e F10.
+O site não fica quebrado sem elas: cada espaço mostra o código e o que deve entrar ali. Nada de foto de banco de imagem fingindo ser a loja.
