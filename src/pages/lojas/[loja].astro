@@ -1,0 +1,301 @@
+---
+import Base from "../../layouts/Base.astro";
+import Cabecalho from "../../components/Cabecalho.astro";
+import Rodape from "../../components/Rodape.astro";
+import BarraAcao from "../../components/BarraAcao.astro";
+import Botao from "../../components/Botao.astro";
+import Ladrilho from "../../components/Ladrilho.astro";
+import Icone from "../../components/Icone.astro";
+import Selo from "../../components/Selo.astro";
+import HeroPagina from "../../components/HeroPagina.astro";
+import Secao from "../../components/Secao.astro";
+import CartaoUnidade from "../../components/CartaoUnidade.astro";
+import EstadoUnidade from "../../components/EstadoUnidade.astro";
+import EspacoImagem from "../../components/EspacoImagem.astro";
+import LadrilhoLoja from "../../components/lojas/LadrilhoLoja.astro";
+import {
+  unidades,
+  textoExame,
+  textoDiaExame,
+  linkWhatsApp,
+  mensagemExame,
+  schemaOtica,
+  type Unidade,
+} from "../../data/unidades";
+import { slugDe, fotosDe, ondeDe, enderecoCurto, partesExame, consultaMapa } from "../../data/lojas";
+
+export function getStaticPaths() {
+  return unidades.map((u) => ({ params: { loja: slugDe[u.id] }, props: { unidade: u } }));
+}
+
+interface Props {
+  unidade: Unidade;
+}
+const { unidade: u } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const site = (Astro.site?.toString() ?? "").replace(/\/$/, "");
+const jsonld = { "@context": "https://schema.org", ...schemaOtica(u, site) };
+
+const rua = enderecoCurto(u);
+const wa = linkWhatsApp(u);
+const waExame = linkWhatsApp(u, mensagemExame(u));
+const { quando, horario } = partesExame(u);
+const fotos = fotosDe[u.id];
+const outras = unidades.filter((o) => o.id !== u.id);
+const consulta = consultaMapa(u);
+const mapaEmbutido = consulta ? `https://maps.google.com/maps?q=${encodeURIComponent(consulta)}&output=embed` : null;
+
+const modoExame =
+  u.exame.modo === "chegada"
+    ? { titulo: "Por ordem de chegada", texto: "Não precisa marcar. Chegue dentro do horário e aguarde a sua vez." }
+    : { titulo: "Com horário marcado", texto: "Marque pelo WhatsApp da loja antes de vir." };
+
+const local = u.bairro.includes("Maré") ? "Maré" : u.bairro;
+const descricao =
+  `Ótica ${u.nome}${rua ? `, ${rua}` : ""}, ${local}. ` +
+  `Horário, exame de vista gratuito na compra dos óculos e orçamento pela foto da receita no WhatsApp.`;
+---
+
+<Base titulo={`Loja ${u.nomeCurto}: endereço e horário · Ótica Girêh`} descricao={descricao}>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(jsonld)} />
+
+  <Cabecalho atual="lojas" />
+
+  <main>
+    <HeroPagina
+      frases={rua ? [u.nome, `${rua}.`] : [u.nome]}
+      sub={`${ondeDe[u.id]}. Mande a foto da receita no WhatsApp da loja e receba o orçamento.`}
+      faixa={`Exame de vista: ${textoDiaExame(u.exame).toLowerCase()}. Gratuito na compra dos óculos.`}
+      semBarra
+    >
+      <div slot="acoes" class="hero-acoes-loja">
+        <EstadoUnidade unidade={u} />
+        <div class="botoes">
+          {
+            wa ? (
+              <Botao href={wa} externo variante="primario" icone="brand-whatsapp">
+                WhatsApp da {u.nomeCurto}
+              </Botao>
+            ) : (
+              <Selo tipo="pendente" icone="brand-whatsapp">WhatsApp a confirmar</Selo>
+            )
+          }
+          {u.mapa && <Botao href={u.mapa} externo variante="linha-clara" icone="route">Como chegar</Botao>}
+        </div>
+      </div>
+      <div slot="lado" class="piso-loja" role="img" aria-label={`Ladrilho da ${u.nome}`}>
+        <Ladrilho padrao={u.padrao} />
+        <Ladrilho padrao={u.padrao} giro={90} />
+        <Ladrilho padrao={u.padrao} giro={270} />
+        <Ladrilho padrao={u.padrao} giro={180} />
+      </div>
+    </HeroPagina>
+
+    <Secao id="loja" semBarra>
+      <div class:list={["piso-cartao", { "com-mapa": mapaEmbutido }]}>
+        <CartaoUnidade unidade={u} destaque nivel="h2" />
+        {
+          mapaEmbutido && (
+            <div class="moldura-mapa">
+              <iframe
+                src={mapaEmbutido}
+                title={`Mapa: ${u.nome}, ${rua ?? u.bairro}`}
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+              />
+            </div>
+          )
+        }
+      </div>
+    </Secao>
+
+    <Secao
+      id="exame"
+      campo="fachada"
+      titulo="Exame de vista nesta loja"
+      lead="Feito aqui na loja, gratuito na compra dos óculos."
+    >
+      <div class="piso-exame">
+        <div class="ex">
+          <span class="ex-icone"><Icone nome="calendar" tamanho={28} /></span>
+          <p class="ex-grande">{quando}</p>
+          <p class="ex-texto">Das {horario}.</p>
+          {u.exame.frequencia === "quinzenal" && <p class="ex-texto">Confirme no WhatsApp qual é a próxima sexta.</p>}
+        </div>
+        <div class="ex">
+          <span class="ex-icone"><Icone nome={u.exame.modo === "chegada" ? "door-enter" : "message-circle"} tamanho={28} /></span>
+          <p class="ex-grande">{modoExame.titulo}</p>
+          <p class="ex-texto">{modoExame.texto}</p>
+        </div>
+      </div>
+      <div class="acoes-exame">
+        {
+          waExame && (
+            <Botao href={waExame} externo variante="linha-clara" icone={u.exame.modo === "agendamento" ? "calendar" : "brand-whatsapp"}>
+              {u.exame.modo === "agendamento" ? "Agendar pelo WhatsApp" : "Tirar dúvida no WhatsApp"}
+            </Botao>
+          )
+        }
+        <Botao href={`${base}/exame-de-vista/`} variante="linha-clara" iconeFim="arrow-right">Tudo sobre o exame</Botao>
+      </div>
+    </Secao>
+
+    <Secao titulo="A loja por fora e por dentro">
+      <div class="fotos">
+        <EspacoImagem codigo={fotos.fachada} descricao={`Fachada da ${u.nome}, de frente, de dia`} proporcao="livre" class="f-fachada" />
+        <EspacoImagem codigo={fotos.interior} descricao={`Interior da ${u.nome}, da porta para dentro`} proporcao="livre" class="f-interior" />
+      </div>
+    </Secao>
+
+    <Secao campo="fachada" titulo="Outras lojas" lead="Mesmo atendimento, com horário e WhatsApp próprios.">
+      <div class="piso-outras">
+        {outras.map((o) => <LadrilhoLoja unidade={o} />)}
+      </div>
+      <div>
+        <Botao href={`${base}/lojas/`} variante="linha-clara" iconeFim="arrow-right">Ver as três lojas</Botao>
+      </div>
+    </Secao>
+  </main>
+
+  <Rodape />
+  <BarraAcao />
+</Base>
+
+<style>
+  .hero-acoes-loja {
+    display: grid;
+    gap: var(--e-4);
+    justify-items: start;
+  }
+  .botoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--e-3);
+  }
+
+  /* O ladrilho da loja em piso 2x2: quatro peças giradas fecham o desenho. */
+  .piso-loja {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--rejunte-w);
+    padding: var(--rejunte-w);
+    background: var(--rejunte);
+    max-width: 26rem;
+    margin-inline-start: auto;
+  }
+  @media (max-width: 56rem) {
+    .piso-loja {
+      max-width: 15rem;
+      margin-inline-start: 0;
+    }
+  }
+
+  /* Cartão e mapa assentados no mesmo piso. */
+  .piso-cartao {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--rejunte-w);
+    padding: var(--rejunte-w);
+    background: var(--rejunte);
+  }
+  .piso-cartao.com-mapa {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  }
+  .piso-cartao :global(.unidade) {
+    border: 0;
+  }
+  .moldura-mapa {
+    min-height: 24rem;
+    background: var(--azul-nevoa);
+  }
+  .moldura-mapa iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 24rem;
+    border: 0;
+  }
+  @media (max-width: 56rem) {
+    .piso-cartao.com-mapa {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .moldura-mapa,
+    .moldura-mapa iframe {
+      min-height: 20rem;
+    }
+  }
+
+  /* Exame: dois ladrilhos esmalte com rejunte. */
+  .piso-exame {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+    gap: var(--rejunte-w);
+    padding: var(--rejunte-w);
+    background: var(--rejunte);
+  }
+  .ex {
+    display: grid;
+    align-content: start;
+    gap: var(--e-2);
+    padding: var(--e-5);
+    background: var(--branco-esmalte);
+    color: var(--azul-noite);
+  }
+  .ex-icone {
+    color: var(--azul-fachada);
+    margin-bottom: var(--e-2);
+  }
+  .ex-grande {
+    font-family: var(--font-display);
+    font-size: var(--fs-subtitulo);
+    font-weight: 720;
+    font-stretch: 108%;
+    line-height: 1.12;
+  }
+  .ex-texto {
+    color: var(--texto-2);
+  }
+  .acoes-exame {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--e-3);
+  }
+
+  /* Fotos: fachada vertical ao lado do interior horizontal, mesma altura. */
+  .fotos {
+    display: grid;
+    grid-template-columns: minmax(0, 8fr) minmax(0, 15fr);
+    gap: var(--rejunte-w);
+    padding: var(--rejunte-w);
+    background: var(--rejunte);
+  }
+  .fotos :global(.espaco) {
+    border: 0;
+  }
+  .fotos :global(.f-fachada) {
+    aspect-ratio: 4 / 5;
+  }
+  .fotos :global(.f-interior) {
+    height: 100%;
+  }
+  @media (max-width: 40rem) {
+    .fotos {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .fotos :global(.f-fachada) {
+      aspect-ratio: 4 / 3;
+    }
+    .fotos :global(.f-interior) {
+      aspect-ratio: 3 / 2;
+      height: auto;
+    }
+  }
+
+  .piso-outras {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
+    gap: var(--rejunte-w);
+    padding: var(--rejunte-w);
+    background: var(--rejunte);
+  }
+</style>
