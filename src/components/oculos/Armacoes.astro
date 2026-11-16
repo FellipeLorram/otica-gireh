@@ -1,0 +1,75 @@
+---
+/** Os quatro tipos de armação, cada um num ladrilho esmalte com o desenho em cima. Um piso só, com rejunte. */
+import DesenhoArmacao from "./DesenhoArmacao.astro";
+import { armacoes } from "../../data/oculos";
+---
+
+<ul class="armacoes" role="list">
+  {
+    armacoes.map((a) => (
+      <li class="armacao">
+        <div class="janela">
+          <DesenhoArmacao tipo={a.id} />
+        </div>
+        <div class="placa">
+          <h3>{a.nome}</h3>
+          <p>{a.texto}</p>
+        </div>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .armacoes {
+    list-style: none;
+    margin: 0;
+    padding: var(--rejunte-w);
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--rejunte-w);
+    background: var(--rejunte);
+  }
+  .armacao {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    gap: var(--rejunte-w);
+  }
+  .janela {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 2 / 1;
+    padding: var(--e-4);
+    background: var(--branco-esmalte);
+  }
+  .placa {
+    display: grid;
+    align-content: start;
+    gap: var(--e-2);
+    padding: var(--e-5);
+    background: var(--branco-esmalte);
+  }
+  p {
+    color: var(--texto-2);
+  }
+  @media (max-width: 64rem) {
+    .armacoes {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 40rem) {
+    .armacoes {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .janela {
+      aspect-ratio: 5 / 2;
+      padding: var(--e-3) var(--e-5);
+    }
+    .janela :global(.desenho) {
+      max-width: 17rem;
+    }
+    .placa {
+      padding: var(--e-4) var(--e-5) var(--e-5);
+    }
+  }
+</style>

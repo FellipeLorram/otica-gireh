@@ -1,0 +1,239 @@
+---
+/**
+ * Tratamentos de lente: um piso de fileiras, cada uma com a foto ou o vídeo e o texto.
+ * O lado da mídia alterna a cada fileira (no celular, a mídia vai sempre em cima).
+ * Vídeos: mudos, em loop, preload="none" e pôster. Tocam só quando estão na tela e
+ * nunca sozinhos com movimento reduzido. Um botão sempre permite pausar ou tocar.
+ */
+import Icone from "../Icone.astro";
+import { tratamentos } from "../../data/oculos";
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+
+<ul class="tratamentos" role="list">
+  {
+    tratamentos.map((t) => (
+      <li class="fileira" id={t.id}>
+        <div class="midia">
+          {t.midia.rotulos && (
+            <div class="rotulos" aria-hidden="true">
+              {t.midia.rotulos.map((r) => (
+                <span>{r}</span>
+              ))}
+            </div>
+          )}
+          {t.midia.tipo === "foto" ? (
+            <img
+              src={`${base}${t.midia.src}`}
+              alt={t.midia.alt}
+              width={t.midia.largura}
+              height={t.midia.altura}
+              loading="lazy"
+              decoding="async"
+            />
+          ) : (
+            <div class="video" data-video>
+              <video
+                src={`${base}${t.midia.src}`}
+                poster={`${base}${t.midia.poster}`}
+                width={t.midia.largura}
+                height={t.midia.altura}
+                muted
+                playsinline
+                loop
+                preload="none"
+                aria-label={t.midia.alt}
+              />
+              <button type="button" class="tocar" data-tocar hidden aria-label="Tocar o vídeo">
+                <span class="i-tocar"><Icone nome="player-play" tamanho={22} /></span>
+                <span class="i-pausar"><Icone nome="player-pause" tamanho={22} /></span>
+                <span class="tocar-texto" data-tocar-texto>Tocar</span>
+              </button>
+            </div>
+          )}
+        </div>
+        <div class="texto">
+          {t.itens.map((i) => (
+            <div class="item">
+              <h3>{i.nome}</h3>
+              <p>{i.texto}</p>
+            </div>
+          ))}
+        </div>
+      </li>
+    ))
+  }
+</ul>
+
+<script>
+  const reduzir = window.matchMedia("(prefers-reduced-motion: reduce)");
+  document.querySelectorAll<HTMLElement>("[data-video]").forEach((caixa) => {
+    const video = caixa.querySelector("video");
+    const botao = caixa.querySelector<HTMLButtonElement>("[data-tocar]");
+    const texto = caixa.querySelector<HTMLElement>("[data-tocar-texto]");
+    if (!video || !botao || !texto) return;
+    let pausadoPelaPessoa = false;
+
+    const marcar = () => {
+      const tocando = !video.paused;
+      botao.classList.toggle("tocando", tocando);
+      botao.setAttribute("aria-label", tocando ? "Pausar o vídeo" : "Tocar o vídeo");
+      texto.textContent = tocando ? "Pausar" : "Tocar";
+    };
+    video.addEventListener("play", marcar);
+    video.addEventListener("pause", marcar);
+
+    botao.hidden = false;
+    botao.addEventListener("click", () => {
+      if (video.paused) {
+        pausadoPelaPessoa = false;
+        video.play().catch(() => {});
+      } else {
+        pausadoPelaPessoa = true;
+        video.pause();
+      }
+    });
+
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(
+        (entradas) => {
+          entradas.forEach((e) => {
+            if (e.isIntersecting) {
+              if (!reduzir.matches && !pausadoPelaPessoa) video.play().catch(() => {});
+            } else if (!video.paused) {
+              video.pause();
+            }
+          });
+        },
+        { threshold: 0.5 },
+      ).observe(caixa);
+    }
+  });
+</script>
+
+<style>
+  .tratamentos {
+    list-style: none;
+    margin: 0;
+    padding: var(--rejunte-w);
+    display: grid;
+    gap: var(--rejunte-w);
+    background: var(--rejunte);
+  }
+  .fileira {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    gap: var(--rejunte-w);
+    scroll-margin-top: var(--e-6);
+  }
+  .fileira:nth-child(even) .midia {
+    order: 2;
+  }
+  .midia {
+    position: relative;
+    background: var(--azul-noite);
+  }
+  .midia img,
+  .midia video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+  .rotulos {
+    position: absolute;
+    inset: auto 0 var(--e-3) 0;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    pointer-events: none;
+  }
+  .rotulos span {
+    justify-self: start;
+    margin-inline-start: var(--e-3);
+    padding: var(--e-1) var(--e-3);
+    background: var(--azul-noite);
+    color: var(--branco-esmalte);
+    font-family: var(--font-display);
+    font-size: var(--fs-apoio);
+    font-weight: 720;
+    font-stretch: 108%;
+    line-height: 1.3;
+  }
+  .video {
+    position: relative;
+    height: 100%;
+  }
+  .tocar {
+    position: absolute;
+    left: var(--e-3);
+    bottom: var(--e-3);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--e-2);
+    min-height: var(--alvo);
+    padding: var(--e-2) var(--e-4);
+    border: 2px solid var(--branco-esmalte);
+    border-radius: var(--raio);
+    background: var(--azul-noite);
+    color: var(--branco-esmalte);
+    font-family: var(--font-display);
+    font-size: var(--fs-acao);
+    font-weight: 720;
+    font-stretch: 112%;
+    cursor: pointer;
+    transition: background-color var(--dur-rapido) ease-out;
+  }
+  .tocar[hidden] {
+    display: none;
+  }
+  .tocar:hover {
+    background: var(--azul-fachada);
+  }
+  .tocar:focus-visible {
+    outline-color: var(--gema);
+  }
+  .i-tocar {
+    display: inline-flex;
+  }
+  .i-pausar,
+  .tocar.tocando .i-tocar {
+    display: none;
+  }
+  .tocar.tocando .i-pausar {
+    display: inline-flex;
+  }
+  .texto {
+    display: grid;
+    align-content: center;
+    gap: var(--e-6);
+    padding: var(--e-7) var(--e-6);
+    background: var(--branco-esmalte);
+    color: var(--azul-noite);
+  }
+  .item {
+    display: grid;
+    gap: var(--e-3);
+    max-width: 34ch;
+  }
+  .item p {
+    font-size: var(--fs-corpo-g);
+    color: var(--texto-2);
+  }
+  @media (max-width: 48rem) {
+    .fileira {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .fileira:nth-child(even) .midia {
+      order: 0;
+    }
+    .texto {
+      padding: var(--e-5);
+      gap: var(--e-5);
+    }
+    .item p {
+      font-size: var(--fs-corpo);
+    }
+  }
+</style>
