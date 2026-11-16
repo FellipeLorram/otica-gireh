@@ -19,15 +19,15 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 
 <Base
   titulo="Exame de vista · Ótica Girêh"
-  descricao="Exame de vista gratuito na compra dos óculos. Sábado na Caju, por ordem de chegada. Na Pinheiro e na Baixa do Sapateiro, na Maré, marque pelo WhatsApp."
+  descricao="Exame de vista gratuito na compra dos óculos. No Caju, aos sábados, sem agendamento. Na Vila do Pinheiro e na Baixa do Sapateiro, com hora marcada pelo WhatsApp."
 >
   <Cabecalho atual="exame" />
 
   <main>
     <HeroPagina
       frases={["Exame de vista", "gratuito na compra dos óculos."]}
-      sub="Sábado na Caju e na Pinheiro, sexta na Baixa do Sapateiro. Escolha a loja mais perto."
-      faixa="Na Caju é só chegar. Na Pinheiro e na Baixa, marque pelo WhatsApp."
+      sub="Sábado no Caju e na Vila do Pinheiro, sexta na Baixa do Sapateiro. Escolha a loja mais perto de você."
+      faixa="No Caju, sem agendamento. Na Vila do Pinheiro e na Baixa, com hora marcada."
       semBarra
     >
       <div slot="acoes" class="so-desktop">
@@ -39,12 +39,12 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
     <Secao
       id="agenda"
       titulo="O dia do exame em cada loja"
-      lead="Cada loja tem o seu dia e o seu jeito. Veja onde fica mais fácil para você."
+      lead="Cada loja tem o seu dia e a sua forma de atendimento. Veja qual fica melhor para você."
     >
       <AgendaLojas />
     </Secao>
 
-    <Secao campo="fachada" titulo="Chegar ou marcar" lead="O exame é o mesmo. Só muda como você entra na fila.">
+    <Secao campo="fachada" titulo="Sem agendamento ou com hora marcada" lead="O exame é o mesmo nas três lojas. O que muda é a forma de atendimento.">
       <ModosExame />
     </Secao>
 
@@ -63,10 +63,10 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
     <Secao campo="fachada" semBarra class="fechamento">
       <div class="fecho">
         <div class="fecho-texto">
-          <h2>Já tem receita? Peça o orçamento.</h2>
+          <h2>Já tem receita? Peça o seu orçamento.</h2>
           <p class="fecho-sub">
-            Mande a foto da receita no WhatsApp da loja mais perto. A gente responde com as opções de lente e armação e
-            o valor.
+            Envie a foto da sua receita no WhatsApp da loja mais perto. Respondemos com as opções de lente e armação e
+            o valor de cada uma.
           </p>
           <div>
             <Botao href={`${base}/#lojas`} variante="primario" icone="brand-whatsapp" iconeFim="arrow-right">

@@ -20,14 +20,14 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 
 <Base
   titulo="Lojas no Caju e na Maré · Ótica Girêh"
-  descricao="As três lojas da Ótica Girêh: no Caju, na Vila do Pinheiro e na Baixa do Sapateiro (Maré). Endereço, horário e dia do exame. Chame a mais perto no WhatsApp."
+  descricao="As três lojas da Ótica Girêh, no Caju, na Vila do Pinheiro e na Baixa do Sapateiro (Maré). Endereço, horário e dia do exame de vista. Fale com a loja no WhatsApp."
 >
   <Cabecalho atual="lojas" />
 
   <main>
     <HeroPagina
       frases={["Três lojas,", "no Caju e na Maré."]}
-      sub="Cada loja tem horário, WhatsApp e dia de exame próprios. Escolha a mais perto de casa."
+      sub="Cada loja tem horário, WhatsApp e dia de exame próprios. Escolha a mais perto de você."
       faixa="Exame de vista gratuito na compra dos óculos"
     >
       <div slot="lado" class="piso-padroes" aria-hidden="true">
@@ -36,7 +36,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
       </div>
     </HeroPagina>
 
-    <Secao id="lojas" titulo="Escolha a sua loja" lead="O selo mostra se a loja está aberta agora.">
+    <Secao id="lojas" titulo="Escolha a sua loja" lead="O selo indica se a loja está aberta agora.">
       <div class="lojas">
         {
           unidades.map((u) => (
@@ -62,7 +62,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
       id="exame"
       campo="fachada"
       titulo="Exame de vista em cada loja"
-      lead="Gratuito na compra dos óculos. Na Caju é por ordem de chegada. Na Pinheiro e na Baixa do Sapateiro, com horário marcado pelo WhatsApp."
+      lead="Gratuito na compra dos óculos. No Caju, o atendimento é por ordem de chegada. Na Vila do Pinheiro e na Baixa do Sapateiro, com horário marcado pelo WhatsApp."
     >
       <AgendaExames />
       <div>
@@ -72,8 +72,8 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 
     <Secao
       id="orcamento"
-      titulo="Já sabe a loja? Mande a receita."
-      lead="Escolha a loja e mande a foto da receita no WhatsApp dela. A gente responde com as opções e o valor."
+      titulo="Já sabe a loja? Envie a sua receita."
+      lead="Escolha a loja e envie a foto da sua receita no WhatsApp dela. Respondemos com as opções e o valor."
       semBarra
     >
       <div class="orc">

@@ -20,6 +20,8 @@ import {
   linkWhatsApp,
   mensagemExame,
   schemaOtica,
+  de,
+  FRASE_MARCA,
   type Unidade,
 } from "../../data/unidades";
 import { slugDe, fotosDe, ondeDe, enderecoCurto, partesExame, consultaMapa } from "../../data/lojas";
@@ -64,7 +66,7 @@ const descricao =
   <main>
     <HeroPagina
       frases={rua ? [u.nome, `${rua}.`] : [u.nome]}
-      sub={`${ondeDe[u.id]}. Mande a foto da receita no WhatsApp da loja e receba o orçamento.`}
+      sub={`${ondeDe[u.id]}. Envie a foto da sua receita no WhatsApp da loja e receba o orçamento.`}
       faixa={`Exame de vista: ${textoDiaExame(u.exame).toLowerCase()}. Gratuito na compra dos óculos.`}
       semBarra
     >
@@ -74,7 +76,7 @@ const descricao =
           {
             wa ? (
               <Botao href={wa} externo variante="primario" icone="brand-whatsapp">
-                WhatsApp da {u.nomeCurto}
+                WhatsApp {de(u)}
               </Botao>
             ) : (
               <Selo tipo="pendente" icone="brand-whatsapp">WhatsApp a confirmar</Selo>
@@ -113,7 +115,7 @@ const descricao =
       id="exame"
       campo="fachada"
       titulo="Exame de vista nesta loja"
-      lead="Feito aqui na loja, gratuito na compra dos óculos."
+      lead="Feito aqui na loja e gratuito na compra dos óculos."
     >
       <div class="piso-exame">
         <div class="ex">
@@ -140,14 +142,14 @@ const descricao =
       </div>
     </Secao>
 
-    <Secao titulo="A loja por fora e por dentro">
+    <Secao titulo="A loja por fora e por dentro" lead={FRASE_MARCA}>
       <div class="fotos">
         <EspacoImagem codigo={fotos.fachada} descricao={`Fachada da ${u.nome}, de frente, de dia`} proporcao="livre" class="f-fachada" />
         <EspacoImagem codigo={fotos.interior} descricao={`Interior da ${u.nome}, da porta para dentro`} proporcao="livre" class="f-interior" />
       </div>
     </Secao>
 
-    <Secao campo="fachada" titulo="Outras lojas" lead="Mesmo atendimento, com horário e WhatsApp próprios.">
+    <Secao campo="fachada" titulo="Outras lojas" lead="O mesmo atendimento, com horário e WhatsApp próprios.">
       <div class="piso-outras">
         {outras.map((o) => <LadrilhoLoja unidade={o} />)}
       </div>
@@ -158,7 +160,7 @@ const descricao =
   </main>
 
   <Rodape />
-  {wa ? <BarraAcao href={wa} rotulo={`WhatsApp da ${u.nomeCurto}`} externo /> : <BarraAcao />}
+  {wa ? <BarraAcao href={wa} rotulo={`WhatsApp ${de(u)}`} externo /> : <BarraAcao />}
 </Base>
 
 <style>

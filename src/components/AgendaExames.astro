@@ -14,8 +14,8 @@ const linhas = unidades.map((u) => ({
   acao:
     u.exame.modo === "agendamento"
       ? { href: linkWhatsApp(u, mensagemExame(u)), texto: "Agendar pelo WhatsApp", icone: "brand-whatsapp" }
-      : { href: u.mapa, texto: "É só chegar. Ver no mapa", icone: "route" },
-  nota: u.exame.frequencia === "quinzenal" ? "Confirme no WhatsApp qual é a próxima sexta." : null,
+      : { href: u.mapa, texto: "Sem agendamento. Ver no mapa", icone: "route" },
+  nota: u.exame.frequencia === "quinzenal" ? "Confirme a próxima data no WhatsApp." : null,
 }));
 ---
 

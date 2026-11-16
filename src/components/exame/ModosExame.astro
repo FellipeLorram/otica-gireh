@@ -5,13 +5,16 @@
  * Dias, horários e telefones vêm de unidades.ts.
  */
 import Ladrilho from "../Ladrilho.astro";
-import { unidades, hora, DIAS, type Unidade } from "../../data/unidades";
+import { unidades, hora, DIAS, em, type Unidade } from "../../data/unidades";
 
 const chegada = unidades.filter((u) => u.exame.modo === "chegada");
 const agendamento = unidades.filter((u) => u.exame.modo === "agendamento");
 
 const nomes = (lista: Unidade[]) =>
-  lista.map((u) => `na ${u.nomeCurto}`).join(" e ").replace(/^n/, "N");
+  lista
+    .map((u) => em(u))
+    .join(" e ")
+    .replace(/^n/, "N");
 const faixa = (u: Unidade) => `das ${hora(u.exame.inicio)} às ${hora(u.exame.fim)}`;
 const diaDe = (u: Unidade) =>
   u.exame.frequencia === "quinzenal" ? `${DIAS[u.exame.dia]}, a cada 15 dias` : DIAS[u.exame.dia];
@@ -20,25 +23,25 @@ const telefones = [...new Set(agendamento.map((u) => u.telefone).filter(Boolean)
 const modos = [
   {
     id: "chegar",
-    titulo: `${nomes(chegada)}, é só chegar`,
+    titulo: `${nomes(chegada)}, sem agendamento`,
     lojas: chegada,
     passos: [
-      ...chegada.map((u) => `Venha no ${diaDe(u)}, ${faixa(u)}.`),
-      "O exame é por ordem de chegada. Não precisa marcar.",
+      ...chegada.map((u) => `Vá à loja no ${diaDe(u)}, ${faixa(u)}.`),
+      "O atendimento é por ordem de chegada, sem marcar horário.",
       "O exame é gratuito na compra dos óculos.",
     ],
   },
   {
     id: "agendar",
-    titulo: `${nomes(agendamento)}, marque antes`,
+    titulo: `${nomes(agendamento)}, com hora marcada`,
     lojas: agendamento,
     passos: [
-      `Chame a loja no WhatsApp${telefones.length === 1 ? ` ${telefones[0]}` : ""} e marque o horário.`,
+      `Fale com a loja no WhatsApp${telefones.length === 1 ? ` ${telefones[0]}` : ""} e marque o seu horário.`,
       ...agendamento.map(
         (u) =>
-          `${u.nomeCurto}: ${diaDe(u)}, ${faixa(u)}.${u.exame.frequencia === "quinzenal" ? ` A loja confirma qual é a próxima ${DIAS[u.exame.dia]}.` : ""}`,
+          `${u.nomeCurto}: ${diaDe(u)}, ${faixa(u)}.${u.exame.frequencia === "quinzenal" ? ` A loja confirma a próxima data.` : ""}`,
       ),
-      "Chegue no horário marcado. O exame é gratuito na compra dos óculos.",
+      "Chegue no horário combinado. O exame é gratuito na compra dos óculos.",
     ],
   },
 ];

@@ -18,15 +18,15 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 
 <Base
   titulo="Óculos e lentes · Ótica Girêh"
-  descricao="Armação de metal, balgriff, fio de nylon e acetato. Lente com antirreflexo, blue filter ou que escurece no sol. No Caju e na Maré: mande a receita no WhatsApp."
+  descricao="Armações de metal, balgriff, fio de nylon e acetato. Lentes com antirreflexo, blue filter e proteção solar. No Caju e na Maré: envie a sua receita no WhatsApp."
 >
   <Cabecalho atual="oculos" />
 
   <main>
     <HeroPagina
-      frases={["Armação e lente", "do jeito da sua receita."]}
-      sub="Os tipos de armação e de lente que a Girêh faz, explicados sem complicação."
-      faixa="Mande a foto da receita no WhatsApp e receba as opções."
+      frases={["Armação e lente", "para a sua receita."]}
+      sub="Os tipos de armação e de lente que trabalhamos, explicados em poucas linhas."
+      faixa="Envie a foto da sua receita no WhatsApp e receba as opções."
     >
       <div slot="acoes">
         <Botao href="#lentes" variante="linha-clara" iconeFim="arrow-down">Ver as lentes</Botao>
@@ -41,7 +41,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 
     <Secao
       titulo="Quatro tipos de armação"
-      lead="O que muda é como a lente fica presa. Na loja você experimenta cada uma."
+      lead="O que muda é a forma como a lente fica presa. Na loja, você experimenta cada uma."
     >
       <Armacoes />
     </Secao>
@@ -50,25 +50,25 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
       id="lentes"
       campo="fachada"
       titulo="Tratamentos de lente"
-      lead="Cada tratamento resolve uma coisa. Dá para escolher um só ou juntar mais de um na mesma lente."
+      lead="Cada tratamento resolve uma necessidade. Você pode escolher um só ou combinar mais de um na mesma lente."
     >
       <Tratamentos />
     </Secao>
 
-    <Secao titulo="Tipos de lente e combinações" lead="O tipo de lente segue a sua receita. Os tratamentos vêm por cima.">
+    <Secao titulo="Tipos de lente e combinações" lead="O tipo de lente segue a sua receita. Os tratamentos entram sobre ela.">
       <Lentes />
     </Secao>
 
     <Barrado />
 
-    <Secao titulo="Marcas que você encontra na Girêh">
+    <Secao titulo="Marcas que trabalhamos">
       <Marcas />
     </Secao>
 
     <Secao
       campo="fachada"
-      titulo="Mande a receita e receba as opções"
-      lead="Escolha a loja e mande a foto da receita no WhatsApp. A gente responde com as opções de lente e armação e o valor de cada uma."
+      titulo="Envie a sua receita e receba as opções"
+      lead="Escolha a loja e envie a foto da sua receita no WhatsApp. Respondemos com as opções de lente e armação e o valor de cada uma."
       semBarra
     >
       <div class="fecho-acoes">

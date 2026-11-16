@@ -6,7 +6,7 @@ Leia este arquivo primeiro. Ele resume o que existe, o que foi decidido e onde e
 **A partir de 16/11/2026, o trabalho é exclusivamente para a Ótica Girêh Caju** (decisão do dono). As páginas da Pinheiro e da Baixa do Sapateiro já existem e ficam como estão: não amplie nem mude nada nelas, a não ser que o dono peça.
 
 ## Girêh Caju: fatos confirmados
-- **Nome:** Ótica Girêh, com circunflexo.
+- **Nome:** Ótica Girêh, com circunflexo. **Slogan: "Qualidade em visão".** No mercado **desde 2009**.
 - **Endereço:** Rua da Felicidade, 41, loja. Caju, Rio de Janeiro – RJ.
 - **WhatsApp:** (21) 96904-5909 (`5521969045909`).
 - **Horário:**
@@ -56,7 +56,7 @@ Leia este arquivo primeiro. Ele resume o que existe, o que foi decidido e onde e
 - **Logo:** redesenhado a partir do original; o olho faz o "Ó". A referência do original está em `assets/ref/logo-original.png`.
 - **Hero da Início:** foca no exame de vista. O orçamento é a segunda ação.
 - **Fotos:** fotos de banco que fingem ser a loja estão proibidas. As mídias de lentes vêm do domínio do dono, com autorização dele.
-- **Texto:** escreva sempre "gratuito na compra dos óculos" por inteiro. Não use "consulta", "diagnóstico" nem "receita médica". Não invente preços, prazos ou avaliações.
+- **Texto:** tom profissional e direto. A loja fala no plural ("respondemos") e trata o cliente por "você"; nada de "a gente" nem gíria. Escreva sempre "gratuito na compra dos óculos" por inteiro. Não use "consulta", "diagnóstico" nem "receita médica". Não invente preços, prazos ou avaliações. A regra completa está em "Voz e texto", no `DESIGN.md`.
 
 ## Para verificar mudanças
 `npx astro build`, depois `.claude/skills/impeccable/scripts/impeccable detect --json src` (tem que dar zero achados), e capturas em 1440 e 390 de largura sem rolagem lateral (ver `DIRETRIZ-PAGINAS.md`).

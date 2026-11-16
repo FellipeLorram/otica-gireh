@@ -13,7 +13,7 @@ import AgendaExames from "../components/AgendaExames.astro";
 import CartaoUnidade from "../components/CartaoUnidade.astro";
 import Marcas from "../components/Marcas.astro";
 import EspacoImagem from "../components/EspacoImagem.astro";
-import { unidades, instagrams, schemaOtica } from "../data/unidades";
+import { unidades, instagrams, schemaOtica, FRASE_MARCA } from "../data/unidades";
 import { slugDe as slugLoja } from "../data/lojas";
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
@@ -26,7 +26,7 @@ const jsonld = {
 
 <Base
   titulo="Ótica Girêh · Exame de vista gratuito na compra dos óculos"
-  descricao="Exame de vista gratuito na compra dos óculos: sábado na Caju, por ordem de chegada; Pinheiro e Baixa do Sapateiro com agendamento. Orçamento pela foto da receita no WhatsApp."
+  descricao="Exame de vista gratuito na compra dos óculos, no Caju e na Maré. Envie a foto da sua receita no WhatsApp da loja e receba o orçamento. Ótica Girêh desde 2009."
 >
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(jsonld)} />
 
@@ -35,8 +35,8 @@ const jsonld = {
   <main>
     <HeroPagina
       frases={["Exame de vista", "gratuito na compra dos óculos."]}
-      sub="Na Caju, é só chegar no sábado à tarde. Na Pinheiro e na Baixa do Sapateiro, o exame é com horário marcado pelo WhatsApp."
-      faixa="Já tem receita? Mande a foto no WhatsApp e receba o orçamento."
+      sub="No Caju, sem agendamento, aos sábados à tarde. Na Vila do Pinheiro e na Baixa do Sapateiro, com horário marcado pelo WhatsApp."
+      faixa="Já tem receita? Envie a foto no WhatsApp e receba o seu orçamento."
       semBarra
     >
       <div slot="acoes" class="so-desktop">
@@ -45,7 +45,7 @@ const jsonld = {
       <Orcamento slot="lado" modo="exame" />
     </HeroPagina>
 
-    <Secao titulo="Como pedir o orçamento">
+    <Secao titulo="Como pedir o seu orçamento">
       <ComoFunciona />
       <p class="apoio">
         Ainda não tem receita? <a href="#exame">Faça o exame de vista na loja</a>. Ele é gratuito na compra dos
@@ -56,8 +56,8 @@ const jsonld = {
     <Secao
       id="exame"
       campo="fachada"
-      titulo="Sábado na Caju e na Pinheiro. Sexta na Baixa."
-      lead="O exame de vista é gratuito na compra dos óculos. Na Caju é por ordem de chegada. Na Pinheiro e na Baixa do Sapateiro, com horário marcado pelo WhatsApp."
+      titulo="Sábado no Caju e no Pinheiro. Sexta na Baixa."
+      lead="O exame de vista é gratuito na compra dos óculos. No Caju, o atendimento é por ordem de chegada. Na Vila do Pinheiro e na Baixa do Sapateiro, com horário marcado pelo WhatsApp."
     >
       <AgendaExames />
       <div>
@@ -73,14 +73,14 @@ const jsonld = {
 
     <Barrado />
 
-    <Secao titulo="Marcas que você encontra na Girêh">
+    <Secao titulo="Marcas que trabalhamos">
       <Marcas />
       <div>
         <Botao href={`${base}/oculos-e-lentes/`} variante="linha" iconeFim="arrow-right">Óculos e lentes</Botao>
       </div>
     </Secao>
 
-    <Secao titulo="Na loja">
+    <Secao titulo="Por dentro da Girêh" lead={FRASE_MARCA}>
       <div class="fotos">
         <EspacoImagem codigo="F04" descricao="Equipe atendendo no balcão" proporcao="livre" class="f-grande" />
         <EspacoImagem codigo="F09" descricao="Expositor de armações na parede" proporcao="livre" class="f-peq" />
@@ -92,7 +92,7 @@ const jsonld = {
       <div class="insta-grade">
         <div>
           <h2>Novidades no Instagram</h2>
-          <p class="insta-sub">Lançamentos, promoções e o dia a dia das lojas.</p>
+          <p class="insta-sub">Lançamentos, promoções e o dia a dia das três lojas.</p>
         </div>
         <ul class="insta-links" role="list">
           {

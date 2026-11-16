@@ -9,7 +9,7 @@ import Botao from "./Botao.astro";
 import Icone from "./Icone.astro";
 import EstadoUnidade from "./EstadoUnidade.astro";
 import TabelaHorarios from "./TabelaHorarios.astro";
-import { textoExame, textoDiaExame, linkWhatsApp, mensagemExame, type Unidade } from "../data/unidades";
+import { textoExame, textoDiaExame, linkWhatsApp, mensagemExame, de, type Unidade } from "../data/unidades";
 
 interface Props {
   unidade: Unidade;
@@ -79,7 +79,7 @@ const waExame = comNumero && u.exame.modo === "agendamento" ? linkWhatsApp(comNu
       {
         wa ? (
           <Botao href={wa} externo variante={destaque ? "primario" : "fachada"} icone="brand-whatsapp">
-            WhatsApp da {u.nomeCurto}
+            WhatsApp {de(u)}
           </Botao>
         ) : (
           <Selo tipo="pendente" icone="brand-whatsapp">WhatsApp a confirmar</Selo>

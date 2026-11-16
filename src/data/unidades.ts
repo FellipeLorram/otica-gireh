@@ -4,6 +4,15 @@ export type Padrao = "rosacea" | "estrela" | "escamas" | "lente";
 
 /** Grafia oficial da marca, confirmada pelo dono: "Girêh". */
 export const NOME_LOGO = "Girêh";
+
+/** Slogan oficial da ótica, confirmado pelo dono. */
+export const SLOGAN = "Qualidade em visão";
+
+/** Ano de fundação, confirmado pelo dono. */
+export const DESDE = 2009;
+
+/** Linha de marca usada no rodapé, na Início e nas páginas de loja. */
+export const FRASE_MARCA = `Desde ${DESDE} cuidando da visão do Caju e da Maré.`;
 export const NOME_TEXTO = "Girêh";
 
 export interface Faixa {
@@ -30,6 +39,8 @@ export interface Unidade {
   endereco: string | null;
   /** Telefone para exibir, ex. "(21) 96904-5909" */
   telefone: string | null;
+  /** Gênero do nome curto, para as preposições: o Caju, o Pinheiro, a Baixa do Sapateiro. */
+  genero: "o" | "a";
   padrao: Padrao;
   whatsapp: string | null; // só dígitos com DDI, ex. 5521999999999 — PENDENTE
   exame: Exame;
@@ -51,6 +62,7 @@ export const unidades: Unidade[] = [
     bairro: "Caju",
     endereco: "Rua da Felicidade, 41, loja. Caju, Rio de Janeiro – RJ",
     telefone: "(21) 96904-5909",
+    genero: "o",
     padrao: "rosacea",
     whatsapp: WHATSAPP_CAJU,
     exame: { modo: "chegada", dia: 6, inicio: "14:30", fim: "18:30", frequencia: "semanal" },
@@ -69,6 +81,7 @@ export const unidades: Unidade[] = [
     bairro: "Vila do Pinheiro, Maré",
     endereco: "Via B-1, 153, Vila do Pinheiro / Travessa Cinquenta e Sete, 119. Maré, Rio de Janeiro – RJ, CEP 21046-280",
     telefone: "(21) 98195-0372",
+    genero: "o",
     padrao: "estrela",
     whatsapp: WHATSAPP_PINHEIRO_BAIXA,
     exame: { modo: "agendamento", dia: 6, inicio: "09:30", fim: "13:30", frequencia: "semanal" },
@@ -86,6 +99,7 @@ export const unidades: Unidade[] = [
     bairro: "Baixa do Sapateiro, Maré",
     endereco: "Rua Pedro Torres, 36. Baixa do Sapateiro, Maré, Rio de Janeiro – RJ",
     telefone: "(21) 98195-0372",
+    genero: "a",
     padrao: "escamas",
     whatsapp: WHATSAPP_PINHEIRO_BAIXA,
     exame: { modo: "agendamento", dia: 5, inicio: "14:30", fim: "18:30", frequencia: "quinzenal" },
@@ -105,8 +119,8 @@ export const instagrams = [
 ];
 
 export const textoExame = {
-  chegada: "Exame por ordem de chegada",
-  agendamento: "Exame com agendamento",
+  chegada: "Exame sem agendamento",
+  agendamento: "Exame com hora marcada",
 } as const;
 
 const DIAS = ["domingo", "segunda", "terça", "quarta", "quinta", "sexta", "sábado"];
@@ -148,6 +162,16 @@ export function linhasHorario(u: Unidade): { dias: string; horario: string; nume
     horario: l.horario,
     numeros: l.dias,
   }));
+}
+
+/** "do Caju" / "da Baixa do Sapateiro" */
+export function de(u: Unidade): string {
+  return `${u.genero === "o" ? "do" : "da"} ${u.nomeCurto}`;
+}
+
+/** "no Caju" / "na Baixa do Sapateiro" */
+export function em(u: Unidade): string {
+  return `${u.genero === "o" ? "no" : "na"} ${u.nomeCurto}`;
 }
 
 export function linkWhatsApp(u: Unidade, mensagem?: string): string | null {

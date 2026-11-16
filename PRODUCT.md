@@ -61,8 +61,8 @@ A ótica do bairro que resolve tudo num lugar só, perto de casa: exame de vista
 
 ## Brand Commitments
 
-- Nome: Ótica Girêh. Logo original: o olho faz o "Ó" de Ótica. O dono autorizou recriar o logo; foi redesenhado no sistema mantendo o olho (`src/components/Logo.astro`). Referência: `assets/ref/logo-original.png`.
-- Tom: próximo, de bairro, direto. Sem cara de rede de varejo.
+- Nome: Ótica Girêh. Slogan: **"Qualidade em visão"**. No mercado **desde 2009** (confirmado pelo dono). Logo original: o olho faz o "Ó" de Ótica. O dono autorizou recriar o logo; foi redesenhado no sistema mantendo o olho (`src/components/Logo.astro`). Referência: `assets/ref/logo-original.png`.
+- Tom: profissional e direto (escolhido pelo dono em 16/11/2026). A loja fala no plural e trata o cliente por "você". Sem gíria e sem "a gente". A regra completa está na seção "Voz e texto" do `DESIGN.md`.
 - Os dois Instagrams aparecem no site.
 
 ## Evidence on Hand

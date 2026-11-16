@@ -45,8 +45,12 @@ Vale para todo agente ou sessão que criar uma página nova. O objetivo é que t
 - **Fotos:** só fotos reais da Girêh ou do domínio do dono. Até chegar a foto, use `EspacoImagem` com o código de `IMAGENS.md`.
 
 ## Regras de texto
-- Português do Brasil, com tom de gente do bairro: frase curta e direta, sem jargão e sem "soluções".
-- **Nome:** "Ótica Girêh", com circunflexo. Os @ do Instagram ficam sem acento.
+- Português do Brasil, **tom profissional e direto**: frase curta, informação na frente, sem gíria e sem explicar demais. A seção "Voz e texto" do `DESIGN.md` manda aqui.
+- **A loja fala no plural** ("respondemos", "trabalhamos"), nunca "a gente". **O cliente é tratado por você.**
+- Vocabulário fixo do exame: *gratuito na compra dos óculos*, *sem hora marcada* / *por ordem de chegada*, *com hora marcada*.
+- Preposições pelo helper: `de(u)` e `em(u)` de `unidades.ts`. Nunca escreva "na Caju".
+- **Nome:** "Ótica Girêh", com circunflexo. Os @ do Instagram ficam sem acento. O slogan "Qualidade em visão" só aparece na assinatura do logo (`<Logo assinatura />`).
+- **Fundação:** 2009. Use a linha pronta `FRASE_MARCA`, no máximo uma vez por página.
 - **Exame:** escreva sempre "gratuito na compra dos óculos", por inteiro. Não use "consulta", "diagnóstico" nem "receita médica". Não diga quem faz o exame: isso ainda não foi confirmado.
 - **Nada inventado:** nada de preço, parcela, prazo, garantia, avaliação, depoimento, número de clientes ou anos de mercado. Se algo for útil mas não confirmado, deixe fora da página e liste no relatório como `[CONFIRMAR]`.
 - **Dados das lojas:** horário, telefone e endereço vêm de `unidades.ts`, nunca escritos à mão. As mensagens de WhatsApp saem de `linkWhatsApp()` e `mensagemExame()`.

@@ -4,16 +4,23 @@
  * Mantém a ideia do logo original: o olho faz o "Ó" de Ótica.
  * O olho é o mesmo desenho do ladrilho Lente, então a marca e o piso falam a mesma língua.
  */
-import { NOME_LOGO } from "../data/unidades";
+import { NOME_LOGO, SLOGAN } from "../data/unidades";
 interface Props {
   tom?: "noite" | "esmalte";
   tamanho?: string; // altura da letra, ex. "1.5rem"
+  /** Mostra o slogan "Qualidade em visão" sob o nome (assinatura completa da marca). */
+  assinatura?: boolean;
   class?: string;
 }
-const { tom = "noite", tamanho = "1.5rem", class: cls = "" } = Astro.props;
+const { tom = "noite", tamanho = "1.5rem", assinatura = false, class: cls = "" } = Astro.props;
 ---
 
-<span class:list={["logo", `logo-${tom}`, cls]} style={`--tam:${tamanho}`} role="img" aria-label={`Ótica ${NOME_LOGO}`}>
+<span
+  class:list={["logo", `logo-${tom}`, { "com-assinatura": assinatura }, cls]}
+  style={`--tam:${tamanho}`}
+  role="img"
+  aria-label={assinatura ? `Ótica ${NOME_LOGO}, ${SLOGAN}` : `Ótica ${NOME_LOGO}`}
+>
   <svg class="olho" viewBox="0 0 60 40" aria-hidden="true" focusable="false">
     <path class="palpebra" d="M3 21 C 14 4, 46 4, 57 21" />
     <path class="palpebra-baixa" d="M1 23.5 C 4 22, 6 22, 8 23 C 20 35, 42 35, 57 21 C 44 39, 18 40, 1 23.5 Z" />
@@ -21,7 +28,10 @@ const { tom = "noite", tamanho = "1.5rem", class: cls = "" } = Astro.props;
     <circle class="brilho" cx="34.2" cy="16.6" r="3.2" />
     <path class="acento" d="M27 2.2 L35 0 L33.2 2.6 L28 4.4 Z" />
   </svg>
-  <span class="palavra" aria-hidden="true">tica {NOME_LOGO}</span>
+  <span class="texto" aria-hidden="true">
+    <span class="palavra">tica {NOME_LOGO}</span>
+    {assinatura && <span class="slogan">{SLOGAN}</span>}
+  </span>
 </span>
 
 <style>
@@ -53,6 +63,20 @@ const { tom = "noite", tamanho = "1.5rem", class: cls = "" } = Astro.props;
   .brilho {
     fill: var(--l-fundo);
   }
+  .texto {
+    display: grid;
+  }
+  .slogan {
+    font-family: var(--font-display);
+    font-weight: 680;
+    font-stretch: 106%;
+    font-size: 0.3em;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    line-height: 1;
+    color: var(--l-slogan);
+    padding-top: 0.22em;
+  }
   .palavra {
     font-family: var(--font-display);
     font-weight: 780;
@@ -61,12 +85,17 @@ const { tom = "noite", tamanho = "1.5rem", class: cls = "" } = Astro.props;
     color: var(--l-tinta);
     padding-top: 0.12em;
   }
+  .com-assinatura .olho {
+    margin-bottom: 0.2em;
+  }
   .logo-noite {
     --l-tinta: var(--azul-noite);
     --l-fundo: var(--azul-nevoa);
+    --l-slogan: var(--texto-2);
   }
   .logo-esmalte {
     --l-tinta: var(--branco-esmalte);
     --l-fundo: var(--azul-fachada);
+    --l-slogan: var(--azul-claro);
   }
 </style>

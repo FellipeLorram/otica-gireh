@@ -9,7 +9,7 @@
 import Ladrilho from "./Ladrilho.astro";
 import Icone from "./Icone.astro";
 import EstadoUnidade from "./EstadoUnidade.astro";
-import { unidades, textoExame, textoCurtoExame, mensagemExame } from "../data/unidades";
+import { unidades, textoExame, textoCurtoExame, mensagemExame, de, em } from "../data/unidades";
 
 interface Props {
   /** Só para a página de fundamentos: usa um número de exemplo quando o real está pendente. */
@@ -31,6 +31,8 @@ const dados = unidades.map((u) => ({
   numero: u.numero,
   telefone: u.telefone,
   whatsapp: u.whatsapp ?? (demo ? NUM_EXEMPLO : null),
+  de: de(u),
+  em: em(u),
   exameModo: u.exame.modo,
   exameQuando: textoCurtoExame(u.exame),
   msgExame: mensagemExame(u),
@@ -65,7 +67,7 @@ const dados = unidades.map((u) => ({
               modo === "exame" ? (
                 <>
                   <span class="quando">{textoCurtoExame(u.exame)}</span>
-                  <span class="modo">{u.exame.modo === "chegada" ? "Por ordem de chegada" : "Com agendamento"}</span>
+                  <span class="modo">{u.exame.modo === "chegada" ? "Por ordem de chegada" : "Com hora marcada"}</span>
                 </>
               ) : (
                 <>
@@ -85,8 +87,8 @@ const dados = unidades.map((u) => ({
         <span class="acao-texto">
           {
             modo === "exame"
-              ? "Toque na loja mais perto para ver o dia e como fazer o exame."
-              : "Toque na loja mais perto. O WhatsApp é o daquela loja."
+              ? "Escolha a loja mais perto de você para ver o dia e como fazer o exame."
+              : "Escolha a loja mais perto de você. O atendimento é no WhatsApp dela."
           }
         </span>
       </button>
@@ -95,12 +97,12 @@ const dados = unidades.map((u) => ({
         <span class="acao-icone" data-icone-mapa hidden><Icone nome="map-pin" tamanho={34} /></span>
         <span class="acao-titulo" data-titulo></span>
         <span class="acao-num" data-num></span>
-        <span class="acao-texto" data-texto>Depois, é só mandar a foto da receita.</span>
+        <span class="acao-texto" data-texto>Em seguida, envie a foto da sua receita.</span>
         <Icone nome="arrow-up-right" tamanho={28} class="acao-seta" />
       </a>
       <a class="acao-segunda" data-segunda href="#" target="_blank" rel="noopener" hidden>
         <Icone nome="brand-whatsapp" tamanho={20} />
-        <span>Já tem receita? Peça o orçamento</span>
+        <span>Já tem receita? Peça o seu orçamento</span>
       </a>
       <div class="acao acao-pendente" data-pendente hidden>
         <span class="acao-titulo" data-titulo-p></span>
@@ -118,6 +120,8 @@ const dados = unidades.map((u) => ({
     numero: string;
     telefone: string | null;
     whatsapp: string | null;
+    de: string;
+    em: string;
     exameModo: "chegada" | "agendamento";
     exameQuando: string;
     msgExame: string;
@@ -157,9 +161,9 @@ const dados = unidades.map((u) => ({
         cheio.href = d.mapa;
         iconeWa.hidden = true;
         iconeMapa.hidden = false;
-        titulo.textContent = `É só chegar na ${d.curto}`;
+        titulo.textContent = `Sem hora marcada ${d.em}`;
         num.textContent = d.exameQuando;
-        texto.textContent = "Por ordem de chegada. Toque para ver como chegar.";
+        texto.textContent = "Atendimento por ordem de chegada. Veja como chegar.";
         cheio.hidden = false;
         pendente.hidden = true;
       } else if (d.whatsapp) {
@@ -167,11 +171,11 @@ const dados = unidades.map((u) => ({
         iconeWa.hidden = false;
         iconeMapa.hidden = true;
         cheio.href = wa(d.whatsapp, exame ? d.msgExame : msgOrc);
-        titulo.textContent = exame ? `Agendar exame na ${d.curto}` : `Abrir WhatsApp da ${d.curto}`;
+        titulo.textContent = exame ? `Agendar exame ${d.em}` : `Abrir WhatsApp ${d.de}`;
         num.textContent = exame ? d.exameQuando : (d.telefone ?? "");
         texto.textContent = exame
-          ? `Pelo WhatsApp ${d.telefone ?? ""}. Gratuito na compra dos óculos.`
-          : "Depois, é só mandar a foto da receita.";
+          ? `No WhatsApp ${d.telefone ?? ""}. Gratuito na compra dos óculos.`
+          : "Em seguida, envie a foto da sua receita.";
         cheio.hidden = false;
         pendente.hidden = true;
       } else {
@@ -359,10 +363,14 @@ const dados = unidades.map((u) => ({
     font-family: var(--font-display);
     font-weight: 820;
     font-stretch: 118%;
-    font-size: clamp(1.3rem, 0.9rem + 1.3vw, 1.9rem);
-    line-height: 1;
+    font-size: var(--fs-gema);
+    line-height: 1.02;
+    text-wrap: balance;
+    overflow-wrap: anywhere;
+    hyphens: auto;
   }
   .acao-num {
+    overflow-wrap: anywhere;
     font-family: var(--font-display);
     font-weight: 720;
     font-stretch: 108%;
@@ -390,6 +398,7 @@ const dados = unidades.map((u) => ({
   .acao-segunda {
     display: flex;
     align-items: center;
+    min-width: 0;
     gap: var(--e-2);
     min-height: 3rem;
     padding: var(--e-2) clamp(1rem, 0.6rem + 1.4vw, 1.5rem);
@@ -409,6 +418,11 @@ const dados = unidades.map((u) => ({
   }
   .acao-segunda :global(.icone) {
     flex: none;
+  }
+  .acao-segunda span {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    line-height: 1.2;
   }
   .acao-segunda:focus-visible {
     outline-color: var(--gema);

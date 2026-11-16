@@ -16,22 +16,22 @@ const perguntas = [
   {
     p: "Preciso comprar os óculos?",
     r: [
-      "O exame de vista é gratuito na compra dos óculos. Se tiver alguma dúvida sobre o seu caso, pergunte no WhatsApp da loja.",
+      "O exame de vista é gratuito na compra dos óculos. Para dúvidas sobre o seu caso, fale com a loja no WhatsApp.",
     ],
   },
   {
     p: "Preciso marcar horário?",
     r: [
-      `Na ${caju.nomeCurto}, não. O exame é por ordem de chegada, todo ${DIAS[caju.exame.dia]}, ${faixa(caju.exame)}.`,
-      `Na ${pinheiro.nomeCurto} e na ${baixa.nomeCurto}, sim. Marque o horário pelo WhatsApp da loja.`,
+      `Na ${caju.nomeCurto}, não. O atendimento é por ordem de chegada, todo ${DIAS[caju.exame.dia]}, ${faixa(caju.exame)}.`,
+      `Na ${pinheiro.nomeCurto} e na ${baixa.nomeCurto}, sim. Marque o seu horário pelo WhatsApp da loja.`,
     ],
   },
   {
-    p: `Como sei qual é a próxima ${DIAS[baixa.exame.dia]} na ${baixa.nomeCurto}?`,
+    p: `Qual é a próxima ${DIAS[baixa.exame.dia]} de exame na ${baixa.nomeCurto}?`,
     r: [
-      `Lá o exame é numa ${DIAS[baixa.exame.dia]} a cada 15 dias, ${faixa(baixa.exame)}. Mande uma mensagem no WhatsApp ${baixa.telefone} e a loja confirma a data.`,
+      `Lá o exame acontece numa ${DIAS[baixa.exame.dia]} a cada 15 dias, ${faixa(baixa.exame)}. Envie uma mensagem para o WhatsApp ${baixa.telefone} e a loja confirma a data.`,
     ],
-    link: waBaixa ? { href: waBaixa, texto: "Perguntar no WhatsApp" } : null,
+    link: waBaixa ? { href: waBaixa, texto: "Confirmar no WhatsApp" } : null,
   },
   {
     p: "Qual é o WhatsApp de cada loja?",

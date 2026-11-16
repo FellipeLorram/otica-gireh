@@ -28,8 +28,8 @@ const lojas = unidades.map((u) => {
     nota: agenda
       ? u.exame.frequencia === "quinzenal"
         ? `Confirme no WhatsApp qual é a próxima ${DIAS[u.exame.dia]} e marque o horário.`
-        : "Marque o horário antes pelo WhatsApp."
-      : "É só chegar, não precisa marcar. Quem chega antes é atendido antes.",
+        : "Marque o seu horário pelo WhatsApp."
+      : "Sem agendamento. O atendimento segue a ordem de chegada.",
     wa: linkWhatsApp(u, mensagemExame(u)),
     agenda,
   };

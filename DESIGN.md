@@ -47,6 +47,11 @@ typography:
     fontSize: "1.3rem"
     fontWeight: 400
     lineHeight: 1.55
+  gema:
+    fontFamily: "Archivo Variable, Archivo, sans-serif"
+    fontSize: "clamp(1.25rem, 0.85rem + 1vw, 1.65rem)"
+    fontWeight: 820
+    lineHeight: 1.02
   ladrilho:
     fontFamily: "Archivo Variable, Archivo, sans-serif"
     fontSize: "clamp(1.05rem, 0.8rem + 1vw, 1.5rem)"
@@ -195,6 +200,7 @@ Uma família só de azuis, puxada da fachada, e um amarelo que só aparece onde 
 - **Corpo** (400, 1.125rem/18px, 1.55): texto corrido, com no máximo 64ch por linha.
 - **Corpo grande** (400, 1.3rem): parágrafo de abertura de seção.
 - **Ladrilho** (780, clamp 1.05–1.5rem): texto dentro de ladrilho (nome da loja no orçamento, marcas, linha do barrado).
+- **Gema** (820, clamp 1.25–1.65rem): o título da ação dentro do ladrilho gema. Quebra com hífen quando precisa.
 - **Ação** (720, 1.0625rem, largura 112%): botões e links do menu.
 - **Apoio** (400, 1rem): tabelas de horário, notas, texto do rodapé.
 - **Mini** (680, 0.8125rem): selos. É o menor tamanho permitido.
@@ -253,6 +259,7 @@ O logo foi redesenhado a partir do logo original da loja. O olho continua fazend
 - **Versões:** noite (sobre fundo claro) e esmalte (sobre azul-fachada).
 - **Uso:** SVG inline com `aria-label="Ótica Girêh"`, altura mínima de 1.25rem.
 - **Favicon:** o olho em esmalte sobre azul-fachada.
+- **Assinatura:** `<Logo assinatura />` acrescenta o slogan "QUALIDADE EM VISÃO" sob o nome, em Archivo 680 com 0.22em de entreletra, em caixa alta. Usado no rodapé. O slogan não aparece solto no corpo do texto.
 
 ### Navigation
 - **Desktop:** barra Azul-fachada de 76px com rejunte inferior em Azul-meio. Logo esmalte à esquerda, três links em Archivo (Lojas, Exame de vista, Óculos e lentes) e o botão gema "Pedir orçamento" à direita. O link ativo ganha um sublinhado de 3px em esmalte, e o hover, em azul-claro.
@@ -307,12 +314,28 @@ Uma faixa de 24px com triângulos em Azul-meio e losangos em Azul-claro sobre Az
 ### Espaço de imagem
 É o lugar reservado para a foto real: campo Azul-névoa com rejunte, o ladrilho Lente pequeno e o código da foto (ver `IMAGENS.md`). Quando a foto chega, vira `<img>` com a mesma proporção.
 
+## Voz e texto
+
+**Tom: profissional e direto.** A Girêh é uma ótica com mais de quinze anos de rua, que vende Ray-Ban e monta multifocal. O texto soa como gente que entende do assunto e não enrola: frase curta, informação na frente, zero gíria e zero floreio.
+
+- **A loja fala no plural, em primeira pessoa:** "respondemos", "trabalhamos", "fazemos". Nunca "a gente".
+- **O cliente é tratado por você:** "envie a sua receita", "escolha a loja mais perto de você".
+- **Verbo na forma imperativa de cortesia:** "envie", "escolha", "marque". Nunca "manda", "chama", "dá uma olhada".
+- **Nada de explicar demais.** Caíram "é só chegar", "sem complicação", "aí é só passar na loja", "do jeito que é". Em lugar deles entram "sem agendamento", "com hora marcada", "por ordem de chegada".
+- **Vocabulário fixo do exame:** *gratuito na compra dos óculos*, *sem hora marcada* / *por ordem de chegada* (Caju), *com hora marcada* (Vila do Pinheiro e Baixa do Sapateiro). As mesmas palavras em todas as páginas.
+- **Preposição certa pelo nome da loja:** use `de(u)` e `em(u)` de `unidades.ts` ("do Caju", "no Caju", "da Baixa do Sapateiro", "na Baixa do Sapateiro"). Nunca escreva "na Caju".
+- **Sem travessão (—) em texto corrido.** Ponto ou vírgula.
+- **Sem exclamação** e sem promessa que a loja não possa cumprir.
+
+**Marca:** Ótica Girêh, com circunflexo. O slogan é **"Qualidade em visão"**, e ele aparece só na assinatura do logo (`<Logo assinatura />`), não solto no meio do texto. A casa é **de 2009**: a linha pronta está em `FRASE_MARCA` ("Desde 2009 cuidando da visão do Caju e da Maré.") e vale repetir no máximo uma vez por página.
+
 ## Do's and Don'ts
 
 ### Do:
 - **Do** use o padrão de ladrilho fixo de cada unidade em todo lugar onde ela aparece (Caju = Rosácea, Pinheiro = Estrela, Baixa = Escamas).
 - **Do** mantenha endereço, modo de exame, horário e WhatsApp da unidade sempre juntos.
-- **Do** escreva "gratuito na compra" por inteiro, nunca só "grátis".
+- **Do** escreva "gratuito na compra dos óculos" por inteiro, nunca só "grátis".
+- **Do** fale no plural pela loja ("respondemos") e trate o cliente por "você".
 - **Do** marque com o selo Pendente todo dado ainda não confirmado.
 - **Do** use texto de 18px para cima e alvos de 56px.
 
@@ -320,5 +343,6 @@ Uma faixa de 24px com triângulos em Azul-meio e losangos em Azul-claro sobre Az
 - **Don't** use foto de banco de imagem ou modelo de óculos genérico. Só fotos reais da loja.
 - **Don't** use sombras, gradientes, vidro ou borda colorida lateral.
 - **Don't** use o amarelo-gema fora da ação.
-- **Don't** invente avaliações, números de clientes, anos de mercado ou preços.
+- **Don't** invente avaliações, números de clientes ou preços. O ano de fundação é 2009 e só esse pode ser citado.
+- **Don't** use "a gente", "é só chegar", "manda" ou qualquer gíria.
 - **Don't** escreva "consulta", "diagnóstico" ou "receita médica" para o exame até confirmar quem o realiza.
