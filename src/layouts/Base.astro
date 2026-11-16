@@ -1,0 +1,30 @@
+---
+import "../styles/global.css";
+interface Props {
+  titulo: string;
+  descricao?: string;
+}
+const { titulo, descricao = "Ótica Girêh: óculos, lentes e exame de vista no Caju, Pinheiro e Baixa do Sapateiro." } = Astro.props;
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#1d3b7c" />
+    <title>{titulo}</title>
+    <meta name="description" content={descricao} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:site_name" content="Ótica Girêh" />
+    <meta property="og:title" content={titulo} />
+    <meta property="og:description" content={descricao} />
+    <slot name="head" />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

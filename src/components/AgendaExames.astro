@@ -1,0 +1,139 @@
+---
+/**
+ * Agenda de exames das três lojas numa só tabela: loja, quando, como e a ação certa.
+ * Caju é por ordem de chegada (Como chegar); Pinheiro e Baixa são com agendamento (WhatsApp).
+ */
+import Ladrilho from "./Ladrilho.astro";
+import Selo from "./Selo.astro";
+import Icone from "./Icone.astro";
+import { unidades, textoDiaExame, textoExame, linkWhatsApp, mensagemExame } from "../data/unidades";
+
+const linhas = unidades.map((u) => ({
+  u,
+  quando: textoDiaExame(u.exame),
+  acao:
+    u.exame.modo === "agendamento"
+      ? { href: linkWhatsApp(u, mensagemExame(u)), texto: "Agendar pelo WhatsApp", icone: "brand-whatsapp" }
+      : { href: u.mapa, texto: "É só chegar. Ver no mapa", icone: "route" },
+  nota: u.exame.frequencia === "quinzenal" ? "Confirme no WhatsApp qual é a próxima sexta." : null,
+}));
+---
+
+<div class="agenda" role="table" aria-label="Agenda do exame de vista por loja">
+  <div class="cab" role="row">
+    <span role="columnheader">Loja</span>
+    <span role="columnheader">Quando</span>
+    <span role="columnheader">Como</span>
+    <span role="columnheader"><span class="sr-only">Ação</span></span>
+  </div>
+  {
+    linhas.map(({ u, quando, acao, nota }) => (
+      <div class="linha" role="row">
+        <span class="loja" role="cell">
+          <span class="mini"><Ladrilho padrao={u.padrao} /></span>
+          <strong>
+            <span class="num">{u.numero}</span> {u.nomeCurto}
+          </strong>
+        </span>
+        <span class="quando" role="cell">
+          {quando}
+          {nota && <small>{nota}</small>}
+        </span>
+        <span role="cell">
+          <Selo tipo="exame">{textoExame[u.exame.modo]}</Selo>
+        </span>
+        <span role="cell">
+          {acao.href && (
+            <a class="acao" href={acao.href} target="_blank" rel="noopener">
+              <Icone nome={acao.icone} tamanho={20} />
+              {acao.texto}
+            </a>
+          )}
+        </span>
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .agenda {
+    display: grid;
+    gap: var(--rejunte-w);
+    padding: var(--rejunte-w);
+    background: var(--rejunte);
+  }
+  .cab,
+  .linha {
+    display: grid;
+    grid-template-columns: minmax(12rem, 1.1fr) minmax(0, 1.5fr) minmax(0, 1.1fr) minmax(0, 1.2fr);
+    gap: var(--e-4);
+    align-items: center;
+    padding: var(--e-4) var(--e-5);
+    background: var(--branco-esmalte);
+    color: var(--azul-noite);
+  }
+  .cab {
+    background: var(--azul-fachada);
+    color: var(--branco-esmalte);
+    font-family: var(--font-display);
+    font-size: var(--fs-rotulo);
+    font-weight: 680;
+    font-stretch: 112%;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding-block: var(--e-3);
+  }
+  .loja {
+    display: flex;
+    align-items: center;
+    gap: var(--e-3);
+  }
+  .mini {
+    width: 3rem;
+    flex: none;
+    outline: var(--rejunte-w) solid var(--rejunte);
+  }
+  .num {
+    color: var(--azul-meio);
+  }
+  .loja strong {
+    font-family: var(--font-display);
+    font-size: var(--fs-ladrilho);
+    font-weight: 780;
+    font-stretch: 110%;
+    line-height: 1.05;
+  }
+  .quando {
+    display: grid;
+    gap: var(--e-1);
+    font-weight: 700;
+  }
+  small {
+    font-size: var(--fs-apoio);
+    font-weight: 400;
+    color: var(--texto-2);
+  }
+  .acao {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--e-2);
+    min-height: 2.75rem;
+    font-family: var(--font-display);
+    font-size: var(--fs-acao);
+    font-weight: 720;
+    font-stretch: 108%;
+    color: var(--azul-fachada);
+  }
+  .acao:hover {
+    color: var(--azul-noite);
+  }
+  @media (max-width: 52rem) {
+    .cab {
+      display: none;
+    }
+    .linha {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--e-3);
+    }
+  }
+</style>

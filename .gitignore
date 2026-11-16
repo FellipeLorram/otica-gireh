@@ -1,0 +1,9 @@
+node_modules
+dist
+.astro
+.vercel
+publicar
+# Impeccable: estado local e binário (reinstale com `npx impeccable install --project --providers=claude`)
+.impeccable/review
+.impeccable/questions
+.claude/skills/impeccable/scripts/bin

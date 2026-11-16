@@ -1,0 +1,441 @@
+---
+/**
+ * Orçamento em ladrilhos (componente-assinatura).
+ * Piso 2x2: três ladrilhos de unidade e o ladrilho gema da ação.
+ * A sequência não pula a escolha da loja: o ladrilho gema só vira link de WhatsApp
+ * depois da escolha, então a conversa sempre cai no número certo.
+ * Antes disso, tocar no gema leva o foco para as lojas (nunca é um toque morto).
+ */
+import Ladrilho from "./Ladrilho.astro";
+import Icone from "./Icone.astro";
+import EstadoUnidade from "./EstadoUnidade.astro";
+import { unidades, textoExame, textoCurtoExame, mensagemExame } from "../data/unidades";
+
+interface Props {
+  /** Só para a página de fundamentos: usa um número de exemplo quando o real está pendente. */
+  demo?: boolean;
+  /**
+   * orcamento: o gema abre o WhatsApp da loja com a mensagem de orçamento.
+   * exame: o gema mostra como fazer o exame naquela loja (chegar ou agendar),
+   *        e o orçamento vira a segunda ação, dentro do mesmo ladrilho.
+   */
+  modo?: "orcamento" | "exame";
+}
+const { demo = false, modo = "orcamento" } = Astro.props;
+const NUM_EXEMPLO = "5521000000000";
+
+const dados = unidades.map((u) => ({
+  id: u.id,
+  nome: u.nome,
+  curto: u.nomeCurto,
+  numero: u.numero,
+  telefone: u.telefone,
+  whatsapp: u.whatsapp ?? (demo ? NUM_EXEMPLO : null),
+  exameModo: u.exame.modo,
+  exameQuando: textoCurtoExame(u.exame),
+  msgExame: mensagemExame(u),
+  mapa: u.mapa,
+}));
+---
+
+<div class="orcamento" data-orcamento data-modo={modo} data-unidades={JSON.stringify(dados)}>
+  <div
+    class="piso"
+    role="radiogroup"
+    aria-label={modo === "exame" ? "Escolha a loja para o exame de vista" : "Escolha a loja para o orçamento"}
+  >
+    {
+      unidades.map((u, i) => (
+        <button
+          type="button"
+          class="tile tile-unidade"
+          role="radio"
+          aria-checked="false"
+          data-unidade={u.id}
+          tabindex={i === 0 ? "0" : "-1"}
+        >
+          <span class="padrao-caixa">
+            <Ladrilho padrao={u.padrao} tom={i === 1 ? "claro" : "esmalte"} class="padrao" cobrir />
+          </span>
+          <span class="placa">
+            <span class="nome">
+              <span class="num">{u.numero}</span> {u.nomeCurto}
+            </span>
+            {
+              modo === "exame" ? (
+                <>
+                  <span class="quando">{textoCurtoExame(u.exame)}</span>
+                  <span class="modo">{u.exame.modo === "chegada" ? "Por ordem de chegada" : "Com agendamento"}</span>
+                </>
+              ) : (
+                <>
+                  <span class="modo">{textoExame[u.exame.modo]}</span>
+                  <EstadoUnidade unidade={u} exame={false} curto class="estado-tile" />
+                </>
+              )
+            }
+          </span>
+        </button>
+      ))
+    }
+    <div class="tile tile-acao" aria-live="polite">
+      <button type="button" class="acao acao-vazia" data-vazio>
+        <Icone nome="hand-finger" tamanho={30} class="acao-icone" />
+        <span class="acao-titulo">Escolha a loja</span>
+        <span class="acao-texto">
+          {
+            modo === "exame"
+              ? "Toque na loja mais perto para ver o dia e como fazer o exame."
+              : "Toque na loja mais perto. O WhatsApp é o daquela loja."
+          }
+        </span>
+      </button>
+      <a class="acao acao-cheia" data-cheio data-link href="#" target="_blank" rel="noopener" hidden>
+        <span class="acao-icone" data-icone-wa><Icone nome="brand-whatsapp" tamanho={34} /></span>
+        <span class="acao-icone" data-icone-mapa hidden><Icone nome="map-pin" tamanho={34} /></span>
+        <span class="acao-titulo" data-titulo></span>
+        <span class="acao-num" data-num></span>
+        <span class="acao-texto" data-texto>Depois, é só mandar a foto da receita.</span>
+        <Icone nome="arrow-up-right" tamanho={28} class="acao-seta" />
+      </a>
+      <a class="acao-segunda" data-segunda href="#" target="_blank" rel="noopener" hidden>
+        <Icone nome="brand-whatsapp" tamanho={20} />
+        <span>Já tem receita? Peça o orçamento</span>
+      </a>
+      <div class="acao acao-pendente" data-pendente hidden>
+        <span class="acao-titulo" data-titulo-p></span>
+        <span class="acao-texto">O WhatsApp desta loja ainda não foi cadastrado.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  type Dado = {
+    id: string;
+    nome: string;
+    curto: string;
+    numero: string;
+    telefone: string | null;
+    whatsapp: string | null;
+    exameModo: "chegada" | "agendamento";
+    exameQuando: string;
+    msgExame: string;
+    mapa: string | null;
+  };
+
+  document.querySelectorAll<HTMLElement>("[data-orcamento]").forEach((raiz) => {
+    const dados: Dado[] = JSON.parse(raiz.dataset.unidades ?? "[]");
+    const piso = raiz.querySelector<HTMLElement>(".piso")!;
+    const botoes = Array.from(raiz.querySelectorAll<HTMLButtonElement>("[data-unidade]"));
+    const vazio = raiz.querySelector<HTMLButtonElement>("[data-vazio]")!;
+    const cheio = raiz.querySelector<HTMLAnchorElement>("[data-cheio]")!;
+    const pendente = raiz.querySelector<HTMLElement>("[data-pendente]")!;
+    const titulo = raiz.querySelector<HTMLElement>("[data-titulo]")!;
+    const num = raiz.querySelector<HTMLElement>("[data-num]")!;
+    const tituloP = raiz.querySelector<HTMLElement>("[data-titulo-p]")!;
+    const texto = raiz.querySelector<HTMLElement>("[data-texto]")!;
+    const segunda = raiz.querySelector<HTMLAnchorElement>("[data-segunda]")!;
+    const iconeWa = raiz.querySelector<HTMLElement>("[data-icone-wa]")!;
+    const iconeMapa = raiz.querySelector<HTMLElement>("[data-icone-mapa]")!;
+    const modo = raiz.dataset.modo;
+    const wa = (n: string, msg: string) => `https://wa.me/${n}?text=${encodeURIComponent(msg)}`;
+
+    function escolher(btn: HTMLButtonElement, focar = false) {
+      const d = dados.find((x) => x.id === btn.dataset.unidade);
+      if (!d) return;
+      botoes.forEach((b) => {
+        const ativo = b === btn;
+        b.setAttribute("aria-checked", String(ativo));
+        b.tabIndex = ativo ? 0 : -1;
+      });
+      if (focar) btn.focus();
+      vazio.hidden = true;
+      const msgOrc = `Olá, Ótica ${d.nome}! Quero um orçamento de óculos. Vou mandar a foto da minha receita.`;
+      if (modo === "exame" && d.exameModo === "chegada" && d.mapa) {
+        // Exame por ordem de chegada: a ação é chegar. O ladrilho leva ao mapa.
+        cheio.href = d.mapa;
+        iconeWa.hidden = true;
+        iconeMapa.hidden = false;
+        titulo.textContent = `É só chegar na ${d.curto}`;
+        num.textContent = d.exameQuando;
+        texto.textContent = "Por ordem de chegada. Toque para ver como chegar.";
+        cheio.hidden = false;
+        pendente.hidden = true;
+      } else if (d.whatsapp) {
+        const exame = modo === "exame";
+        iconeWa.hidden = false;
+        iconeMapa.hidden = true;
+        cheio.href = wa(d.whatsapp, exame ? d.msgExame : msgOrc);
+        titulo.textContent = exame ? `Agendar exame na ${d.curto}` : `Abrir WhatsApp da ${d.curto}`;
+        num.textContent = exame ? d.exameQuando : (d.telefone ?? "");
+        texto.textContent = exame
+          ? `Pelo WhatsApp ${d.telefone ?? ""}. Gratuito na compra dos óculos.`
+          : "Depois, é só mandar a foto da receita.";
+        cheio.hidden = false;
+        pendente.hidden = true;
+      } else {
+        tituloP.textContent = `${d.numero} ${d.nome}`;
+        pendente.hidden = false;
+        cheio.hidden = true;
+      }
+      if (modo === "exame" && d.whatsapp) {
+        segunda.href = wa(d.whatsapp, msgOrc);
+        segunda.hidden = false;
+      } else {
+        segunda.hidden = true;
+      }
+    }
+
+    vazio.addEventListener("click", () => {
+      botoes[0].focus();
+      piso.classList.remove("chamar");
+      void piso.offsetWidth;
+      piso.classList.add("chamar");
+    });
+
+    botoes.forEach((btn, i) => {
+      btn.addEventListener("click", () => escolher(btn));
+      btn.addEventListener("keydown", (e) => {
+        const passo = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
+        if (!passo) return;
+        e.preventDefault();
+        escolher(botoes[(i + passo + botoes.length) % botoes.length], true);
+      });
+    });
+  });
+</script>
+
+<style>
+  .piso {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--rejunte-w);
+    padding: var(--rejunte-w);
+    background: var(--rejunte);
+  }
+  .tile {
+    position: relative;
+    min-width: 0;
+    overflow: hidden;
+  }
+  .tile-unidade {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    border: 0;
+    background: var(--branco-esmalte);
+    cursor: pointer;
+    text-align: left;
+    color: var(--azul-noite);
+    font: inherit;
+  }
+  .padrao-caixa {
+    display: block;
+    aspect-ratio: 2 / 1;
+    overflow: hidden;
+    position: relative;
+  }
+  .tile-unidade :global(.padrao) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: auto;
+  }
+  /* Ao passar o mouse, o padrão dá um toque e volta ao eixo do piso. */
+  .tile-unidade:hover :global(.desenho) {
+    animation: toque var(--dur-assenta) var(--ease-assenta);
+  }
+  .tile-unidade[aria-checked="true"] :global(.desenho) {
+    transform: rotate(90deg);
+  }
+  .chamar .tile-unidade :global(.desenho) {
+    animation: toque 520ms var(--ease-assenta);
+  }
+  @keyframes toque {
+    40% {
+      transform: rotate(calc(var(--giro) + 14deg));
+    }
+  }
+  .tile-unidade:focus-visible {
+    outline-offset: -6px;
+    outline-width: 4px;
+  }
+  .placa {
+    flex: 1;
+    display: grid;
+    align-content: start;
+    gap: var(--e-1);
+    padding: var(--e-3) var(--e-4) var(--e-4);
+    border-top: var(--rejunte-w) solid var(--rejunte);
+    transition: background-color var(--dur-assenta) var(--ease-assenta);
+  }
+  .tile-unidade[aria-checked="true"] .placa {
+    background: var(--azul-fachada);
+    color: var(--branco-esmalte);
+  }
+  .nome {
+    font-family: var(--font-display);
+    font-weight: 780;
+    font-stretch: 112%;
+    font-size: var(--fs-ladrilho);
+    line-height: 1.05;
+  }
+  .num {
+    color: var(--azul-meio);
+    margin-right: 0.15em;
+  }
+  .modo {
+    font-size: var(--fs-apoio);
+    color: var(--texto-2);
+    line-height: 1.3;
+  }
+  .tile-unidade[aria-checked="true"] .num,
+  .tile-unidade[aria-checked="true"] .modo {
+    color: var(--texto-2-escuro);
+  }
+  .placa :global(.estado-tile) {
+    margin-top: var(--e-1);
+  }
+
+  .tile-acao {
+    display: grid;
+    background: var(--gema);
+    color: var(--azul-noite);
+  }
+  .acao {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    gap: var(--e-2);
+    width: 100%;
+    min-height: 100%;
+    padding: clamp(1rem, 0.6rem + 1.4vw, 1.5rem);
+    background: transparent;
+    border: 0;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    text-decoration: none;
+    position: relative;
+  }
+  .acao[hidden] {
+    display: none;
+  }
+  .acao-vazia {
+    cursor: pointer;
+    background:
+      repeating-linear-gradient(-45deg, transparent 0 10px, rgb(14 28 61 / 0.06) 10px 20px),
+      var(--gema);
+  }
+  .acao-cheia:hover {
+    background: var(--gema-forte);
+  }
+  .acao-cheia:focus-visible,
+  .acao-vazia:focus-visible {
+    outline-offset: -6px;
+    outline-width: 4px;
+  }
+  .acao-icone {
+    display: flex;
+    flex: none;
+    margin-bottom: auto;
+  }
+  .acao-icone[hidden] {
+    display: none;
+  }
+  .acao :global(.acao-seta) {
+    position: absolute;
+    top: clamp(1rem, 0.6rem + 1.4vw, 1.5rem);
+    right: clamp(1rem, 0.6rem + 1.4vw, 1.5rem);
+    transition: transform var(--dur-rapido) ease-out;
+  }
+  .acao-cheia:hover :global(.acao-seta) {
+    transform: translate(3px, -3px);
+  }
+  .acao-titulo {
+    font-family: var(--font-display);
+    font-weight: 820;
+    font-stretch: 118%;
+    font-size: clamp(1.3rem, 0.9rem + 1.3vw, 1.9rem);
+    line-height: 1;
+  }
+  .acao-num {
+    font-family: var(--font-display);
+    font-weight: 720;
+    font-stretch: 108%;
+    font-size: var(--fs-ladrilho);
+    font-variant-numeric: tabular-nums;
+  }
+  .acao-texto {
+    font-size: var(--fs-apoio);
+    line-height: 1.35;
+  }
+  .quando {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-stretch: 106%;
+    font-size: var(--fs-apoio);
+    line-height: 1.25;
+  }
+  .tile-unidade[aria-checked="true"] .quando {
+    color: var(--branco-esmalte);
+  }
+  /* Segunda ação (orçamento) dentro do ladrilho do exame: uma faixa noite no pé do gema. */
+  .tile-acao:has(.acao-segunda:not([hidden])) {
+    grid-template-rows: 1fr auto;
+  }
+  .acao-segunda {
+    display: flex;
+    align-items: center;
+    gap: var(--e-2);
+    min-height: 3rem;
+    padding: var(--e-2) clamp(1rem, 0.6rem + 1.4vw, 1.5rem);
+    background: var(--azul-noite);
+    color: var(--branco-esmalte);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-stretch: 106%;
+    font-size: var(--fs-apoio);
+    text-decoration: none;
+  }
+  .acao-segunda[hidden] {
+    display: none;
+  }
+  .acao-segunda:hover {
+    background: var(--azul-fachada);
+  }
+  .acao-segunda :global(.icone) {
+    flex: none;
+  }
+  .acao-segunda:focus-visible {
+    outline-color: var(--gema);
+    outline-offset: -4px;
+  }
+
+  /* Celular: cada loja vira uma fileira (ladrilho à esquerda, texto à direita) e a ação fecha o piso. */
+  @media (max-width: 34rem) {
+    .piso {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .tile-unidade {
+      display: grid;
+      grid-template-columns: 6rem minmax(0, 1fr);
+    }
+    .padrao-caixa {
+      aspect-ratio: auto;
+      min-height: 6rem;
+    }
+    .placa {
+      border-top: 0;
+      border-left: var(--rejunte-w) solid var(--rejunte);
+      padding: var(--e-3) var(--e-4);
+      align-content: center;
+    }
+    .acao {
+      min-height: 9rem;
+    }
+  }
+</style>

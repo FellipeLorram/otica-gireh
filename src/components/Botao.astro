@@ -1,0 +1,116 @@
+---
+/**
+ * Botão / link de ação. Quinas retas, alvo mínimo de 56px.
+ * primario = gema (a ação nº 1, uma por vista)
+ * fachada  = azul-fachada (ações secundárias fortes)
+ * linha    = contorno azul-noite (ações terciárias)
+ * linha-clara = contorno esmalte, para campos azul-fachada
+ */
+import Icone from "./Icone.astro";
+
+interface Props {
+  href?: string;
+  variante?: "primario" | "fachada" | "linha" | "linha-clara";
+  icone?: string;
+  iconeFim?: string;
+  externo?: boolean;
+  class?: string;
+  type?: "button" | "submit";
+  [key: string]: unknown;
+}
+const {
+  href,
+  variante = "primario",
+  icone,
+  iconeFim,
+  externo = false,
+  class: cls = "",
+  type = "button",
+  ...resto
+} = Astro.props;
+const Tag = href ? "a" : "button";
+const extra = href
+  ? externo
+    ? { href, target: "_blank", rel: "noopener" }
+    : { href }
+  : { type };
+---
+
+<Tag class:list={["botao", `botao-${variante}`, cls]} {...extra} {...resto}>
+  {icone && <Icone nome={icone} tamanho={22} />}
+  <span><slot /></span>
+  {iconeFim && <Icone nome={iconeFim} tamanho={22} class="seta" />}
+</Tag>
+
+<style>
+  .botao {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--e-3);
+    min-height: var(--alvo);
+    padding: var(--e-3) var(--e-5);
+    border: 2px solid transparent;
+    border-radius: var(--raio);
+    font-family: var(--font-display);
+    font-size: var(--fs-acao);
+    font-weight: 720;
+    font-stretch: 112%;
+    letter-spacing: 0.005em;
+    line-height: 1.15;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      background-color var(--dur-rapido) ease-out,
+      color var(--dur-rapido) ease-out,
+      transform var(--dur-rapido) ease-out;
+  }
+  .botao:active {
+    transform: translateY(1px);
+  }
+  .botao :global(.icone) {
+    flex: none;
+  }
+  .botao :global(.seta) {
+    transition: transform var(--dur-rapido) ease-out;
+  }
+  .botao:hover :global(.seta) {
+    transform: translateX(3px);
+  }
+  .botao-primario {
+    background: var(--gema);
+    color: var(--azul-noite);
+    border-color: var(--azul-noite);
+  }
+  .botao-primario:hover {
+    background: var(--gema-forte);
+  }
+  .botao-fachada {
+    background: var(--azul-fachada);
+    color: var(--branco-esmalte);
+  }
+  .botao-fachada:hover {
+    background: var(--azul-noite);
+  }
+  .botao-linha {
+    background: transparent;
+    color: var(--azul-noite);
+    border-color: var(--azul-noite);
+  }
+  .botao-linha:hover {
+    background: var(--azul-noite);
+    color: var(--branco-esmalte);
+  }
+  .botao-linha-clara {
+    background: transparent;
+    color: var(--branco-esmalte);
+    border-color: var(--azul-claro);
+  }
+  .botao-linha-clara:hover {
+    background: var(--branco-esmalte);
+    color: var(--azul-noite);
+  }
+  .botao-linha-clara:focus-visible {
+    outline-color: var(--gema);
+  }
+</style>

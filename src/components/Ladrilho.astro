@@ -1,0 +1,158 @@
+---
+/**
+ * Ladrilho: um módulo de ladrilho hidráulico desenhado em SVG.
+ * Cada unidade tem o seu padrão; a marca usa "lente".
+ * Quatro ladrilhos iguais lado a lado fecham o desenho, como no piso de verdade.
+ */
+import type { Padrao } from "../data/unidades";
+
+interface Props {
+  padrao: Padrao;
+  tom?: "esmalte" | "fachada" | "claro";
+  giro?: 0 | 90 | 180 | 270;
+  class?: string;
+  rotulo?: string;
+  /** Preenche a caixa recortando o desenho (como um ladrilho visto por uma janela). */
+  cobrir?: boolean;
+}
+
+const { padrao, tom = "esmalte", giro = 0, class: cls = "", rotulo, cobrir = false } = Astro.props;
+const uid = `l${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<svg
+  class:list={["ladrilho", `tom-${tom}`, cls]}
+  viewBox="0 0 100 100"
+  preserveAspectRatio={cobrir ? "xMidYMid slice" : undefined}
+  role={rotulo ? "img" : undefined}
+  aria-label={rotulo}
+  aria-hidden={rotulo ? undefined : "true"}
+  focusable="false"
+  style={`--giro:${giro}deg`}
+>
+  <defs>
+    <clipPath id={uid}><rect width="100" height="100" /></clipPath>
+  </defs>
+  <g clip-path={`url(#${uid})`}>
+    <rect width="100" height="100" class="f" />
+    <g class="desenho">
+      {
+        padrao === "rosacea" && (
+          <>
+            {[
+              [0, 0],
+              [100, 0],
+              [0, 100],
+              [100, 100],
+            ].map(([x, y]) => (
+              <>
+                <circle cx={x} cy={y} r="44" class="a" />
+                <circle cx={x} cy={y} r="33" class="f" />
+                <circle cx={x} cy={y} r="22" class="b" />
+                <circle cx={x} cy={y} r="11" class="a" />
+              </>
+            ))}
+            {[0, 90, 180, 270].map((r) => (
+              <path
+                d="M50 50 C 42 38, 42 24, 50 14 C 58 24, 58 38, 50 50 Z"
+                class="b"
+                transform={`rotate(${r + 45} 50 50)`}
+              />
+            ))}
+            <circle cx="50" cy="50" r="7" class="a" />
+          </>
+        )
+      }
+      {
+        padrao === "estrela" && (
+          <>
+            <path d="M0 0 H24 L0 24 Z M100 0 V24 L76 0 Z M0 100 V76 L24 100 Z M100 100 H76 L100 76 Z" class="b" />
+            <rect x="25" y="25" width="50" height="50" class="a" />
+            <rect x="25" y="25" width="50" height="50" class="a" transform="rotate(45 50 50)" />
+            <circle cx="50" cy="50" r="17" class="f" />
+            <circle cx="50" cy="50" r="9" class="b" />
+            <path d="M50 0 L56 8 L50 16 L44 8 Z M50 100 L56 92 L50 84 L44 92 Z M0 50 L8 44 L16 50 L8 56 Z M100 50 L92 44 L84 50 L92 56 Z" class="a" />
+          </>
+        )
+      }
+      {
+        padrao === "escamas" && (
+          <>
+            {[
+              [0, 0],
+              [100, 0],
+              [50, 50],
+              [0, 100],
+              [100, 100],
+            ].map(([x, y]) => (
+              <>
+                <circle cx={x} cy={y} r="50" class="a" />
+                <circle cx={x} cy={y} r="39" class="f" />
+                <circle cx={x} cy={y} r="28" class="b" />
+                <circle cx={x} cy={y} r="17" class="f" />
+                <circle cx={x} cy={y} r="7" class="a" />
+              </>
+            ))}
+          </>
+        )
+      }
+      {
+        padrao === "lente" && (
+          <>
+            {[
+              [0, 0],
+              [100, 0],
+              [0, 100],
+              [100, 100],
+            ].map(([x, y]) => (
+              <>
+                <circle cx={x} cy={y} r="30" class="b" />
+                <circle cx={x} cy={y} r="22" class="f" />
+              </>
+            ))}
+            <path d="M8 50 C 26 22, 74 22, 92 50 C 74 78, 26 78, 8 50 Z" class="a" />
+            <circle cx="50" cy="50" r="16" class="f" />
+            <circle cx="50" cy="50" r="8" class="b" />
+          </>
+        )
+      }
+    </g>
+  </g>
+</svg>
+
+<style>
+  .ladrilho {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+  }
+  .desenho {
+    transform-origin: 50px 50px;
+    transform: rotate(var(--giro));
+    transition: transform var(--dur-assenta) var(--ease-assenta);
+  }
+  .f {
+    fill: var(--t-fundo);
+  }
+  .a {
+    fill: var(--t-a);
+  }
+  .b {
+    fill: var(--t-b);
+  }
+  .tom-esmalte {
+    --t-fundo: var(--branco-esmalte);
+    --t-a: var(--azul-fachada);
+    --t-b: var(--azul-meio);
+  }
+  .tom-fachada {
+    --t-fundo: var(--azul-fachada);
+    --t-a: var(--azul-claro);
+    --t-b: var(--azul-meio);
+  }
+  .tom-claro {
+    --t-fundo: var(--azul-claro);
+    --t-a: var(--azul-fachada);
+    --t-b: var(--branco-esmalte);
+  }
+</style>

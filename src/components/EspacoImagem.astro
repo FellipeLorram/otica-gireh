@@ -1,0 +1,65 @@
+---
+/**
+ * Espaço reservado para uma foto real que o dono vai enviar.
+ * Mostra o código da foto (ver IMAGENS.md), para a troca ser direta.
+ * Quando `src` existe, vira a foto de verdade.
+ */
+import Ladrilho from "./Ladrilho.astro";
+interface Props {
+  codigo: string;
+  descricao: string;
+  proporcao?: string; // "4/5", "16/9", "1/1" ou "livre" (o pai define o tamanho)
+  src?: string;
+  alt?: string;
+  class?: string;
+}
+const { codigo, descricao, proporcao = "4/5", src, alt = "", class: cls = "" } = Astro.props;
+---
+
+{
+  src ? (
+    <img class:list={["foto", cls]} src={src} alt={alt} style={proporcao === "livre" ? undefined : `aspect-ratio:${proporcao}`} loading="lazy" decoding="async" />
+  ) : (
+    <figure class:list={["espaco", cls]} style={proporcao === "livre" ? undefined : `aspect-ratio:${proporcao}`}>
+      <span class="selo-ladrilho"><Ladrilho padrao="lente" tom="claro" /></span>
+      <figcaption>
+        <span class="rotulo">Foto {codigo}</span>
+        <span>{descricao}</span>
+      </figcaption>
+    </figure>
+  )
+}
+
+<style>
+  .foto {
+    width: 100%;
+    object-fit: cover;
+  }
+  .espaco {
+    margin: 0;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: var(--e-3);
+    padding: var(--e-5);
+    background: var(--azul-nevoa);
+    color: var(--azul-fachada);
+    text-align: center;
+    border: var(--rejunte-w) solid var(--rejunte);
+  }
+  .selo-ladrilho {
+    width: 3.5rem;
+    outline: var(--rejunte-w) solid var(--rejunte);
+  }
+  figcaption {
+    display: grid;
+    gap: var(--e-1);
+    max-width: 26ch;
+    color: var(--azul-noite);
+    font-size: var(--fs-apoio);
+    line-height: 1.35;
+  }
+  .rotulo {
+    color: var(--azul-fachada);
+  }
+</style>

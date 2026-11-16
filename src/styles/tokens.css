@@ -1,0 +1,67 @@
+/* Ótica Gireh — tokens do design system "Ladrilho azul".
+   Fonte única de verdade para cores, tipo, espaço e forma. */
+
+:root {
+  /* Cor: o azul da fachada, clareado. Estratégia Committed: o azul ocupa campos inteiros. */
+  --azul-noite: #0e1c3d;      /* tinta: texto e contornos */
+  --azul-fachada: #1d3b7c;    /* o azul da fachada: campos fortes, barrado */
+  --azul-meio: #4d6fb3;       /* segundo tom dos ladrilhos; nunca texto sobre claro */
+  --azul-claro: #bcd0ef;      /* o tom clareado da fachada: campos de seção */
+  --azul-nevoa: #e3ecf8;      /* chão da página */
+  --branco-esmalte: #f8fafd;  /* esmalte do ladrilho, superfícies de leitura */
+  --rejunte: #a9bddf;         /* linhas entre módulos */
+  --texto-2: #34477a;         /* texto secundário, tingido de azul */
+  --texto-2-escuro: #c9d7f0;  /* texto secundário sobre azul-fachada */
+
+  --gema: #f5b82e;            /* acento único: a ação */
+  --gema-forte: #e09f12;      /* hover/pressionado */
+
+  --aberto: #17704a;          /* estado: aberto agora */
+  --fechado: #a3261e;         /* estado: fechado / erro */
+  --aberto-fundo: #d5ecdf;
+  --aberto-tinta: #0d4a30;
+  --fechado-fundo: #f6dcd9;
+  --fechado-tinta: #74180f;
+
+  /* Tipo */
+  --font-display: "Archivo Variable", "Archivo", "Arial Narrow", sans-serif;
+  --font-texto: "Atkinson Hyperlegible Next", "Atkinson Hyperlegible", system-ui, sans-serif;
+
+  --fs-display: clamp(2.5rem, 1rem + 4.4vw, 4.6rem);
+  --fs-titulo: clamp(1.9rem, 1.2rem + 2.6vw, 3rem);
+  --fs-subtitulo: clamp(1.35rem, 1.1rem + 0.9vw, 1.75rem);
+  --fs-corpo: 1.125rem;   /* 18px: público amplo, inclusive baixa visão */
+  --fs-corpo-g: 1.3rem;
+  --fs-acao: 1.0625rem;   /* botões e menu */
+  --fs-apoio: 1rem;       /* tabelas, notas, texto de apoio */
+  --fs-ladrilho: clamp(1.05rem, 0.8rem + 1vw, 1.5rem); /* texto dentro de ladrilho, barrado, marcas */
+  --fs-rotulo: 0.9rem;
+  --fs-mini: 0.8125rem;
+
+  --lh-display: 0.94;
+  --lh-titulo: 1.04;
+  --lh-corpo: 1.55;
+
+  /* Espaço (base 4) */
+  --e-1: 0.25rem;
+  --e-2: 0.5rem;
+  --e-3: 0.75rem;
+  --e-4: 1rem;
+  --e-5: 1.5rem;
+  --e-6: 2rem;
+  --e-7: 3rem;
+  --e-8: 4rem;
+  --e-9: 6rem;
+
+  /* Forma: quinas retas, como ladrilho. */
+  --rejunte-w: 3px;
+  --raio: 2px;
+  --alvo: 3.5rem; /* 56px: alvo de toque mínimo das ações */
+  --largura: 76rem;
+  --medida: 64ch;
+
+  /* Movimento: um quarto de volta, que assenta. */
+  --dur-assenta: 360ms;
+  --dur-rapido: 160ms;
+  --ease-assenta: cubic-bezier(0.16, 1, 0.3, 1);
+}

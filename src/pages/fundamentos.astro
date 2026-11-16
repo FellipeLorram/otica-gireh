@@ -1,0 +1,547 @@
+---
+import Base from "../layouts/Base.astro";
+import Ladrilho from "../components/Ladrilho.astro";
+import Barrado from "../components/Barrado.astro";
+import Botao from "../components/Botao.astro";
+import Selo from "../components/Selo.astro";
+import Orcamento from "../components/Orcamento.astro";
+import CartaoUnidade from "../components/CartaoUnidade.astro";
+import EspacoImagem from "../components/EspacoImagem.astro";
+import Logo from "../components/Logo.astro";
+import Cabecalho from "../components/Cabecalho.astro";
+import Rodape from "../components/Rodape.astro";
+import BarraAcao from "../components/BarraAcao.astro";
+import Marcas from "../components/Marcas.astro";
+import TabelaHorarios from "../components/TabelaHorarios.astro";
+import { unidades } from "../data/unidades";
+
+const cores = [
+  { nome: "Azul-noite", var: "--azul-noite", hex: "#0E1C3D", papel: "Texto e contornos", claro: true },
+  { nome: "Azul-fachada", var: "--azul-fachada", hex: "#1D3B7C", papel: "O azul da fachada. Campos fortes e barrado", claro: true },
+  { nome: "Azul-meio", var: "--azul-meio", hex: "#4D6FB3", papel: "Segundo tom do ladrilho. Nunca texto", claro: true },
+  { nome: "Azul-claro", var: "--azul-claro", hex: "#BCD0EF", papel: "A fachada clareada. Campos de seção" },
+  { nome: "Azul-névoa", var: "--azul-nevoa", hex: "#E3ECF8", papel: "Chão da página" },
+  { nome: "Branco-esmalte", var: "--branco-esmalte", hex: "#F8FAFD", papel: "Esmalte do ladrilho e leitura" },
+  { nome: "Gema", var: "--gema", hex: "#F5B82E", papel: "Só a ação: pedir orçamento" },
+  { nome: "Rejunte", var: "--rejunte", hex: "#A9BDDF", papel: "Linhas entre módulos" },
+];
+
+const padroes = [
+  { id: "lente", nome: "Lente", uso: "Marca Girêh" },
+  { id: "rosacea", nome: "Rosácea", uso: "01 Caju" },
+  { id: "estrela", nome: "Estrela", uso: "02 Pinheiro" },
+  { id: "escamas", nome: "Escamas", uso: "03 Baixa do Sapateiro" },
+] as const;
+
+const espacos = [
+  ["e-2", "0.5rem"],
+  ["e-3", "0.75rem"],
+  ["e-4", "1rem"],
+  ["e-5", "1.5rem"],
+  ["e-6", "2rem"],
+  ["e-7", "3rem"],
+  ["e-8", "4rem"],
+  ["e-9", "6rem"],
+];
+---
+
+<Base titulo="Fundamentos do design · Ótica Girêh">
+  <Cabecalho />
+  <header class="topo campo-fachada">
+    <div class="envoltorio topo-in">
+      <h1>Ladrilho azul</h1>
+      <p class="intro">
+        Os fundamentos visuais do site da Ótica Girêh. O azul vem da fachada, mais claro. A forma vem do
+        ladrilho hidráulico: módulos quadrados, rejunte fino, um padrão por loja.
+      </p>
+    </div>
+    <Barrado />
+  </header>
+
+  <main>
+    <section class="secao envoltorio" aria-labelledby="s-cor">
+      <h2 id="s-cor">Cor</h2>
+      <p class="lead">
+        O azul ocupa campos inteiros, sem ficar só no detalhe. O amarelo-gema aparece em um lugar por tela: a ação.
+      </p>
+      <ul class="paleta" role="list">
+        {
+          cores.map((c) => (
+            <li class:list={["cor", { escura: c.claro }]} style={`background:var(${c.var})`}>
+              <span class="cor-nome">{c.nome}</span>
+              <span class="cor-hex">{c.hex}</span>
+              <span class="cor-papel">{c.papel}</span>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="proporcao" aria-label="Proporção de uso das cores numa página">
+        <span style="flex:34;background:var(--azul-nevoa)">Névoa</span>
+        <span style="flex:24;background:var(--azul-claro)">Claro</span>
+        <span style="flex:22;background:var(--azul-fachada);color:var(--branco-esmalte)">Fachada</span>
+        <span style="flex:12;background:var(--branco-esmalte)">Esmalte</span>
+        <span style="flex:5;background:var(--azul-noite);color:var(--branco-esmalte)" aria-label="Noite"></span>
+        <span style="flex:3;background:var(--gema)" aria-label="Gema"></span>
+      </div>
+    </section>
+
+    <section class="secao envoltorio" aria-labelledby="s-tipo">
+      <h2 id="s-tipo">Tipografia</h2>
+      <div class="tipo-grade">
+        <div class="tipo-amostra">
+          <p class="rotulo cinza">Archivo Expanded · títulos, letra de fachada</p>
+          <p class="t-display">Mande a foto da receita.</p>
+          <p class="t-titulo">Exame de vista gratuito na compra</p>
+          <p class="t-sub">Três lojas no Caju e na Maré</p>
+        </div>
+        <div class="tipo-amostra">
+          <p class="rotulo cinza">Atkinson Hyperlegible Next · texto</p>
+          <p class="t-corpo-g">
+            Feita para quem enxerga pouco. Cada letra tem forma própria: I, l e 1 não se confundem, nem 0 e O.
+          </p>
+          <p>
+            Corpo em 18px, linhas de até 64 caracteres. Na Caju o exame é por ordem de chegada. Na Pinheiro e na
+            Baixa do Sapateiro, com horário marcado.
+          </p>
+          <p class="rotulo">Rótulo · Unidade 02 · Pinheiro</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="secao envoltorio" aria-labelledby="s-logo">
+      <h2 id="s-logo">Logo</h2>
+      <p class="lead">
+        Redesenhado a partir do logo da loja. O olho continua fazendo o "Ó" de Ótica, agora com o mesmo traço do
+        ladrilho Lente. O nome vem na letra de fachada do site.
+      </p>
+      <div class="logos">
+        <div class="logo-caixa"><Logo tom="noite" tamanho="clamp(1.5rem, 0.9rem + 1.8vw, 2.5rem)" /></div>
+        <div class="logo-caixa caixa-fachada"><Logo tom="esmalte" tamanho="clamp(1.5rem, 0.9rem + 1.8vw, 2.5rem)" /></div>
+        <div class="logo-par">
+          <div class="logo-lente"><Ladrilho padrao="lente" tom="fachada" /></div>
+          <p class="nota">O mesmo olho no ladrilho da marca e no ícone do navegador.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="secao secao-cheia campo-claro" aria-labelledby="s-ladrilho">
+      <div class="envoltorio">
+        <h2 id="s-ladrilho">Ladrilhos</h2>
+        <p class="lead">
+          Quatro padrões. Cada loja tem o seu, e ele aparece no orçamento, no cartão da unidade e na página da
+          loja. Quatro peças iguais fecham o desenho.
+        </p>
+        <div class="padroes">
+          {
+            padroes.map((p) => (
+              <figure class="padrao">
+                <div class="quatro">
+                  <Ladrilho padrao={p.id} />
+                  <Ladrilho padrao={p.id} giro={90} />
+                  <Ladrilho padrao={p.id} giro={270} />
+                  <Ladrilho padrao={p.id} giro={180} />
+                </div>
+                <figcaption>
+                  <strong>{p.nome}</strong>
+                  <span>{p.uso}</span>
+                </figcaption>
+              </figure>
+            ))
+          }
+        </div>
+        <p class="rotulo cinza tons-rot">Três tons por padrão</p>
+        <div class="tons">
+          <Ladrilho padrao="estrela" tom="esmalte" />
+          <Ladrilho padrao="estrela" tom="claro" />
+          <Ladrilho padrao="estrela" tom="fachada" />
+        </div>
+      </div>
+    </section>
+
+    <Barrado>Exame de vista gratuito na compra dos óculos</Barrado>
+
+    <section class="secao envoltorio" aria-labelledby="s-acoes">
+      <h2 id="s-acoes">Ações e selos</h2>
+      <p class="lead">Quinas retas e alvo mínimo de 56px. O botão gema aparece uma vez por tela.</p>
+      <div class="linha-demo">
+        <Botao variante="primario" icone="brand-whatsapp">Pedir orçamento</Botao>
+        <Botao variante="fachada" icone="calendar">Agendar exame</Botao>
+        <Botao variante="linha" icone="route">Como chegar</Botao>
+        <Botao variante="linha" iconeFim="arrow-right">Ver as lojas</Botao>
+      </div>
+      <div class="linha-demo campo-fachada faixa-escura">
+        <Botao variante="primario" icone="brand-whatsapp">Pedir orçamento</Botao>
+        <a class="link-claro" href="https://www.instagram.com/oticagirehoficial/">@oticagirehoficial</a>
+      </div>
+      <div class="linha-demo">
+        <Selo tipo="exame" icone="eye">Exame por ordem de chegada</Selo>
+        <Selo tipo="exame" icone="calendar">Exame com agendamento</Selo>
+        <Selo tipo="aberto">Aberto agora · fecha às 18h</Selo>
+        <Selo tipo="fechado">Fechado · abre amanhã às 9h</Selo>
+        <Selo tipo="fachada">Gratuito na compra</Selo>
+        <Selo tipo="pendente">A confirmar</Selo>
+      </div>
+      <p class="nota">Os horários dos selos acima são exemplos.</p>
+    </section>
+
+    <section class="secao envoltorio" aria-labelledby="s-marcas">
+      <h2 id="s-marcas">Marcas</h2>
+      <p class="lead">Escritas na letra do site, assentadas como ladrilho. Não usamos logos de outras marcas.</p>
+      <Marcas />
+    </section>
+
+    <section class="secao secao-cheia campo-nevoa" id="orcamento" aria-labelledby="s-orc">
+      <div class="envoltorio orc-grade">
+        <div class="orc-texto">
+          <h2 id="s-orc">Orçamento em ladrilhos</h2>
+          <p class="lead">
+            O componente principal. Escolha a loja: o padrão dela gira e assenta, e o ladrilho gema passa a mostrar o
+            WhatsApp daquela unidade. Antes de escolher a loja, o link não aparece, então a conversa sempre cai no
+            número certo.
+          </p>
+          <p class="nota">Aqui ele usa um número de exemplo até os números reais chegarem. Também funciona pelo teclado, com as setas.</p>
+        </div>
+        <div class="orc-piso"><Orcamento demo /></div>
+      </div>
+    </section>
+
+    <section class="secao envoltorio" aria-labelledby="s-unid">
+      <h2 id="s-unid">Cartão de unidade</h2>
+      <p class="lead">Tudo de uma loja no mesmo lugar. O que falta confirmar aparece tracejado, para não ir ao ar por engano.</p>
+      <div class="unidades">
+        {unidades.map((u) => <CartaoUnidade unidade={u} demo />)}
+      </div>
+    </section>
+
+    <section class="secao envoltorio" aria-labelledby="s-img">
+      <h2 id="s-img">Espaço de imagem</h2>
+      <p class="lead">Fotos reais da loja, nunca de banco de imagem. Até chegarem, cada espaço mostra o código da foto da lista.</p>
+      <div class="imgs">
+        <EspacoImagem codigo="F01" descricao="Fachada da Girêh Caju, de frente, de dia" proporcao="4/5" />
+        <EspacoImagem codigo="F04" descricao="Equipe atendendo no balcão" proporcao="1/1" />
+        <EspacoImagem codigo="F07" descricao="Exame de vista: o equipamento na sala" proporcao="4/5" />
+      </div>
+    </section>
+
+    <section class="secao envoltorio" aria-labelledby="s-esp">
+      <h2 id="s-esp">Espaço e forma</h2>
+      <p class="lead">Base de 4px. Sem sombras: a profundidade vem do rejunte de 3px e da troca de tom.</p>
+      <ul class="escala" role="list">
+        {
+          espacos.map(([n, v]) => (
+            <li>
+              <span class="barra" style={`width:${v}`} />
+              <code>--{n}</code>
+              <span>{v}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+    <section class="secao envoltorio" aria-labelledby="s-hor">
+      <h2 id="s-hor">Horários</h2>
+      <p class="lead">A linha de hoje fica marcada, e o estado "aberto agora" é calculado pelo horário de Brasília.</p>
+      <div class="horarios-demo">
+        {
+          unidades.map((u) => (
+            <div>
+              <h3>{u.nome}</h3>
+              <TabelaHorarios unidade={u} />
+            </div>
+          ))
+        }
+      </div>
+    </section>
+  </main>
+
+  <Rodape />
+  <BarraAcao />
+</Base>
+
+<style>
+  .topo {
+    background: var(--azul-fachada);
+    color: var(--branco-esmalte);
+  }
+  .topo-in {
+    padding: var(--e-7) 0 var(--e-8);
+    display: grid;
+    gap: var(--e-5);
+  }
+  .logos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+    gap: var(--rejunte-w);
+    padding: var(--rejunte-w);
+    background: var(--rejunte);
+  }
+  .logo-caixa {
+    display: grid;
+    place-items: center;
+    min-height: 12rem;
+    padding: var(--e-6);
+    background: var(--azul-nevoa);
+  }
+  .caixa-fachada {
+    background: var(--azul-fachada);
+  }
+  .logo-par {
+    display: grid;
+    grid-template-columns: 7rem minmax(0, 1fr);
+    align-items: center;
+    gap: var(--e-4);
+    padding: var(--e-5);
+    background: var(--branco-esmalte);
+  }
+  .horarios-demo {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+    gap: var(--e-6);
+  }
+  .horarios-demo > div {
+    display: grid;
+    gap: var(--e-3);
+    align-content: start;
+  }
+  .topo h1 {
+    max-width: 12ch;
+  }
+  .intro {
+    max-width: 52ch;
+    font-size: var(--fs-corpo-g);
+    color: var(--texto-2-escuro);
+  }
+
+  .secao {
+    padding: var(--e-9) 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--e-5);
+  }
+  .secao-cheia > .envoltorio {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--e-5);
+  }
+  .campo-claro {
+    background: var(--azul-claro);
+  }
+  .campo-nevoa {
+    background: var(--branco-esmalte);
+    border-block: var(--rejunte-w) solid var(--rejunte);
+  }
+  .lead {
+    max-width: var(--medida);
+    font-size: var(--fs-corpo-g);
+    color: var(--texto-2);
+    margin-top: calc(-1 * var(--e-2));
+  }
+  .nota {
+    font-size: var(--fs-apoio);
+    color: var(--texto-2);
+  }
+  .cinza {
+    color: var(--texto-2);
+  }
+
+  .paleta {
+    list-style: none;
+    margin: 0;
+    padding: var(--rejunte-w);
+    background: var(--rejunte);
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--rejunte-w);
+  }
+  @media (max-width: 40rem) {
+    .paleta {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  .cor {
+    aspect-ratio: 3 / 2;
+    padding: var(--e-4);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 0.15rem;
+    color: var(--azul-noite);
+  }
+  .cor.escura {
+    color: var(--branco-esmalte);
+  }
+  .cor-nome {
+    font-family: var(--font-display);
+    font-weight: 760;
+    font-stretch: 112%;
+    font-size: 1.1rem;
+  }
+  .cor-hex {
+    font-size: var(--fs-apoio);
+  }
+  .cor-papel {
+    font-size: var(--fs-mini);
+    line-height: 1.3;
+  }
+  .proporcao {
+    display: flex;
+    height: 3rem;
+    border: var(--rejunte-w) solid var(--rejunte);
+    font-family: var(--font-display);
+    font-size: var(--fs-mini);
+    font-weight: 680;
+  }
+  .proporcao span {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    padding-inline: var(--e-3);
+    overflow: hidden;
+  }
+
+  .tipo-grade {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+    gap: var(--e-7);
+  }
+  .tipo-amostra {
+    display: grid;
+    gap: var(--e-4);
+    align-content: start;
+  }
+  .t-display {
+    font-family: var(--font-display);
+    font-size: var(--fs-display);
+    line-height: var(--lh-display);
+    font-weight: 820;
+    font-stretch: 125%;
+    letter-spacing: -0.02em;
+  }
+  .t-titulo {
+    font-family: var(--font-display);
+    font-size: var(--fs-titulo);
+    line-height: var(--lh-titulo);
+    font-weight: 780;
+    font-stretch: 118%;
+  }
+  .t-sub {
+    font-family: var(--font-display);
+    font-size: var(--fs-subtitulo);
+    font-weight: 720;
+    font-stretch: 108%;
+    color: var(--azul-fachada);
+  }
+  .t-corpo-g {
+    font-size: var(--fs-corpo-g);
+  }
+
+  .padroes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+    gap: var(--e-6);
+  }
+  .padrao {
+    margin: 0;
+    display: grid;
+    gap: var(--e-3);
+  }
+  .quatro {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--rejunte-w);
+    padding: var(--rejunte-w);
+    background: var(--rejunte);
+  }
+  .padrao figcaption {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--e-3);
+    font-family: var(--font-display);
+    font-stretch: 110%;
+  }
+  .padrao figcaption span {
+    color: var(--texto-2);
+  }
+  .tons-rot {
+    margin-top: var(--e-4);
+  }
+  .tons {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 8rem));
+    gap: var(--rejunte-w);
+  }
+
+  .linha-demo {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--e-3) var(--e-4);
+  }
+  .faixa-escura {
+    background: var(--azul-fachada);
+    padding: var(--e-5);
+  }
+  .link-claro {
+    color: var(--branco-esmalte);
+    font-weight: 700;
+  }
+
+  .orc-grade {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    gap: var(--e-7);
+    align-items: center;
+  }
+  .orc-texto {
+    display: grid;
+    gap: var(--e-4);
+  }
+  .orc-piso {
+    max-width: 34rem;
+    width: 100%;
+    justify-self: end;
+  }
+  @media (max-width: 52rem) {
+    .orc-grade {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .orc-piso {
+      justify-self: stretch;
+      max-width: none;
+    }
+  }
+
+  .unidades {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 21rem), 1fr));
+    gap: var(--e-5);
+    align-items: start;
+  }
+  .imgs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+    gap: var(--e-4);
+    align-items: start;
+  }
+
+  .escala {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--e-2);
+  }
+  .escala li {
+    display: grid;
+    grid-template-columns: 7rem 5rem 1fr;
+    align-items: center;
+    gap: var(--e-4);
+  }
+  .barra {
+    height: 1rem;
+    background: var(--azul-fachada);
+  }
+  code {
+    font-size: var(--fs-apoio);
+  }
+</style>

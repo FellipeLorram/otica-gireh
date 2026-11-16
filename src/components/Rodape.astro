@@ -1,0 +1,163 @@
+---
+/** Rodapé: as três lojas com horário e contato, os dois Instagrams e a marca. */
+import Logo from "./Logo.astro";
+import Barrado from "./Barrado.astro";
+import Icone from "./Icone.astro";
+import { unidades, instagrams, linhasHorario, textoDiaExame, linkWhatsApp } from "../data/unidades";
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const slug = { caju: "caju", pinheiro: "pinheiro", baixa: "baixa-do-sapateiro" } as const;
+const ano = new Date().getFullYear();
+---
+
+<footer class="rodape campo-fachada">
+  <Barrado />
+  <div class="envoltorio corpo">
+    <div class="topo">
+      <Logo tom="esmalte" tamanho="1.75rem" />
+      <p class="frase">Óculos, lentes e exame de vista no Caju e na Maré.</p>
+    </div>
+
+    <div class="lojas">
+      {
+        unidades.map((u) => {
+          const wa = linkWhatsApp(u);
+          return (
+            <section class="loja" aria-labelledby={`rod-${u.id}`}>
+              <h2 id={`rod-${u.id}`}>
+                <a href={`${base}/lojas/${slug[u.id]}/`}>
+                  <span class="num">{u.numero}</span> {u.nome}
+                </a>
+              </h2>
+              <p class="sec">{u.endereco ?? u.bairro}</p>
+              <ul class="horas" role="list">
+                {linhasHorario(u)
+                  .filter((l) => l.horario !== "Fechado")
+                  .map((l) => (
+                    <li>
+                      <span>{l.dias}</span> <span>{l.horario}</span>
+                    </li>
+                  ))}
+              </ul>
+              <p class="sec">Exame: {textoDiaExame(u.exame)}</p>
+              {wa ? (
+                <a class="wa" href={wa} target="_blank" rel="noopener">
+                  <Icone nome="brand-whatsapp" tamanho={20} />
+                  WhatsApp da {u.nomeCurto}
+                </a>
+              ) : (
+                <p class="sec pend">WhatsApp a confirmar</p>
+              )}
+            </section>
+          );
+        })
+      }
+    </div>
+
+    <div class="fim">
+      <ul class="redes" role="list">
+        {
+          instagrams.map((i) => (
+            <li>
+              <a href={i.url} target="_blank" rel="noopener">
+                <Icone nome="brand-instagram" tamanho={22} />@{i.usuario}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="sec">© {ano} Ótica Girêh. Domingo as lojas estão fechadas.</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .rodape {
+    background: var(--azul-fachada);
+    color: var(--branco-esmalte);
+  }
+  .corpo {
+    display: grid;
+    gap: var(--e-7);
+    padding: var(--e-8) 0 var(--e-7);
+  }
+  .topo {
+    display: grid;
+    gap: var(--e-3);
+  }
+  .frase {
+    color: var(--texto-2-escuro);
+    font-size: var(--fs-corpo-g);
+    max-width: 30ch;
+  }
+  .lojas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+    gap: var(--e-6);
+  }
+  .loja {
+    display: grid;
+    gap: var(--e-2);
+    align-content: start;
+    padding-top: var(--e-4);
+    border-top: var(--rejunte-w) solid var(--azul-meio);
+  }
+  .num {
+    color: var(--azul-claro);
+  }
+  h2 {
+    font-size: var(--fs-subtitulo);
+    line-height: 1.1;
+  }
+  h2 a {
+    text-decoration: none;
+  }
+  h2 a:hover {
+    text-decoration: underline;
+  }
+  .sec {
+    color: var(--texto-2-escuro);
+    font-size: var(--fs-apoio);
+    line-height: 1.45;
+  }
+  .pend {
+    font-style: italic;
+  }
+  .horas {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: var(--fs-apoio);
+  }
+  .horas li {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--e-3);
+    max-width: 18rem;
+  }
+  .wa,
+  .redes a {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--e-2);
+    min-height: 2.75rem;
+    font-weight: 700;
+    color: var(--branco-esmalte);
+  }
+  .fim {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--e-4);
+    padding-top: var(--e-5);
+    border-top: 2px solid var(--azul-meio);
+  }
+  .redes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--e-2) var(--e-5);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+</style>

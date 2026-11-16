@@ -1,0 +1,72 @@
+---
+/**
+ * Logo Ótica Girêh, redesenhado no sistema "Ladrilho azul".
+ * Mantém a ideia do logo original: o olho faz o "Ó" de Ótica.
+ * O olho é o mesmo desenho do ladrilho Lente, então a marca e o piso falam a mesma língua.
+ */
+import { NOME_LOGO } from "../data/unidades";
+interface Props {
+  tom?: "noite" | "esmalte";
+  tamanho?: string; // altura da letra, ex. "1.5rem"
+  class?: string;
+}
+const { tom = "noite", tamanho = "1.5rem", class: cls = "" } = Astro.props;
+---
+
+<span class:list={["logo", `logo-${tom}`, cls]} style={`--tam:${tamanho}`} role="img" aria-label={`Ótica ${NOME_LOGO}`}>
+  <svg class="olho" viewBox="0 0 60 40" aria-hidden="true" focusable="false">
+    <path class="palpebra" d="M3 21 C 14 4, 46 4, 57 21" />
+    <path class="palpebra-baixa" d="M1 23.5 C 4 22, 6 22, 8 23 C 20 35, 42 35, 57 21 C 44 39, 18 40, 1 23.5 Z" />
+    <circle class="iris" cx="30" cy="21" r="11.5" />
+    <circle class="brilho" cx="34.2" cy="16.6" r="3.2" />
+    <path class="acento" d="M27 2.2 L35 0 L33.2 2.6 L28 4.4 Z" />
+  </svg>
+  <span class="palavra" aria-hidden="true">tica {NOME_LOGO}</span>
+</span>
+
+<style>
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.08em;
+    font-size: var(--tam);
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .olho {
+    width: 1.62em;
+    height: auto;
+    overflow: visible;
+    margin-bottom: -0.04em;
+  }
+  .palpebra {
+    fill: none;
+    stroke: var(--l-tinta);
+    stroke-width: 3.2;
+    stroke-linecap: round;
+  }
+  .palpebra-baixa,
+  .iris,
+  .acento {
+    fill: var(--l-tinta);
+  }
+  .brilho {
+    fill: var(--l-fundo);
+  }
+  .palavra {
+    font-family: var(--font-display);
+    font-weight: 780;
+    font-stretch: 118%;
+    letter-spacing: -0.01em;
+    color: var(--l-tinta);
+    padding-top: 0.12em;
+  }
+  .logo-noite {
+    --l-tinta: var(--azul-noite);
+    --l-fundo: var(--azul-nevoa);
+  }
+  .logo-esmalte {
+    --l-tinta: var(--branco-esmalte);
+    --l-fundo: var(--azul-fachada);
+  }
+</style>

@@ -1,0 +1,80 @@
+---
+/**
+ * Barra fixa do celular: o "Pedir orçamento" sempre a um toque.
+ * Leva às lojas (cada uma com seu WhatsApp). Some quando um bloco com data-sem-barra está na tela,
+ * para não ter duas ações gema ao mesmo tempo.
+ */
+import Icone from "./Icone.astro";
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+
+<div class="barra-acao" data-barra-acao>
+  <a href={`${base}/#lojas`} class="acao">
+    <Icone nome="brand-whatsapp" tamanho={24} />
+    <span>Pedir orçamento</span>
+  </a>
+</div>
+
+<script>
+  // Some enquanto houver na tela um bloco marcado com data-sem-barra (onde já existe uma ação gema).
+  const barra = document.querySelector<HTMLElement>("[data-barra-acao]");
+  const alvos = document.querySelectorAll<HTMLElement>("[data-sem-barra]");
+  if (barra && alvos.length && "IntersectionObserver" in window) {
+    const visiveis = new Set<Element>();
+    const io = new IntersectionObserver(
+      (entradas) => {
+        entradas.forEach((e) => (e.isIntersecting ? visiveis.add(e.target) : visiveis.delete(e.target)));
+        barra.classList.toggle("escondida", visiveis.size > 0);
+      },
+      { threshold: 0.2 },
+    );
+    alvos.forEach((a) => io.observe(a));
+  }
+</script>
+
+<style>
+  .barra-acao {
+    display: none;
+  }
+  @media (max-width: 56rem) {
+    .barra-acao {
+      display: block;
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 20;
+      padding: var(--e-2) var(--e-3) calc(var(--e-2) + env(safe-area-inset-bottom));
+      background: var(--azul-noite);
+      border-top: var(--rejunte-w) solid var(--azul-meio);
+      transition: transform var(--dur-assenta) var(--ease-assenta);
+    }
+    .barra-acao.escondida {
+      transform: translateY(110%);
+    }
+    :global(.rodape) {
+      padding-bottom: 5rem;
+    }
+  }
+  .acao {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--e-3);
+    min-height: var(--alvo);
+    background: var(--gema);
+    color: var(--azul-noite);
+    border-radius: var(--raio);
+    font-family: var(--font-display);
+    font-weight: 760;
+    font-stretch: 112%;
+    font-size: 1.15rem;
+    text-decoration: none;
+  }
+  .acao:active {
+    background: var(--gema-forte);
+  }
+  .acao:focus-visible {
+    outline-color: var(--gema);
+  }
+</style>

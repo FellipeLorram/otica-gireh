@@ -1,0 +1,73 @@
+---
+/** Horário de funcionamento de uma loja. A linha de hoje fica marcada (horário de Brasília). */
+import { linhasHorario, type Unidade } from "../data/unidades";
+interface Props {
+  unidade: Unidade;
+  class?: string;
+}
+const { unidade: u, class: cls = "" } = Astro.props;
+const linhas = linhasHorario(u);
+---
+
+<table class:list={["horarios", cls]} data-horarios-tabela>
+  <caption class="sr-only">Horário de funcionamento da {u.nome}</caption>
+  <tbody>
+    {
+      linhas.map((l) => (
+        <tr data-dias={l.numeros.join(",")} class:list={{ fechado: l.horario === "Fechado" }}>
+          <th scope="row">{l.dias}</th>
+          <td>{l.horario}</td>
+        </tr>
+      ))
+    }
+  </tbody>
+</table>
+
+<script>
+  const dia = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].indexOf(
+    new Intl.DateTimeFormat("en-US", { timeZone: "America/Sao_Paulo", weekday: "short" }).format(new Date()),
+  );
+  document.querySelectorAll("[data-horarios-tabela] tr").forEach((tr) => {
+    const dias = (tr as HTMLElement).dataset.dias?.split(",").map(Number) ?? [];
+    if (dias.includes(dia)) {
+      tr.classList.add("hoje");
+      tr.querySelector("th")?.insertAdjacentHTML("beforeend", ' <span class="hoje-rot">hoje</span>');
+    }
+  });
+</script>
+
+<style>
+  .horarios {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--fs-apoio);
+  }
+  th,
+  td {
+    padding: 0.45rem 0.6rem;
+    text-align: left;
+    border-bottom: 2px solid var(--azul-nevoa);
+  }
+  th {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-stretch: 108%;
+    width: 46%;
+  }
+  td {
+    font-variant-numeric: tabular-nums;
+  }
+  .fechado td {
+    color: var(--texto-2);
+  }
+  .hoje {
+    background: var(--azul-claro);
+  }
+  .horarios :global(.hoje-rot) {
+    font-family: var(--font-display);
+    font-size: var(--fs-mini);
+    font-weight: 680;
+    color: var(--azul-fachada);
+    margin-left: 0.3rem;
+  }
+</style>

@@ -1,0 +1,19 @@
+---
+/** Ícone Tabler (outline) inline, traço único de 2px em toda a interface. */
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+
+interface Props {
+  nome: string;
+  tamanho?: number;
+  class?: string;
+}
+const { nome, tamanho = 24, class: cls = "" } = Astro.props;
+const caminho = join(process.cwd(), "node_modules/@tabler/icons/icons/outline", `${nome}.svg`);
+const bruto = readFileSync(caminho, "utf8")
+  .replace(/<!--.*?-->/gs, "")
+  .replace(/\s(class|width|height)="[^"]*"/g, "")
+  .replace("<svg", `<svg width="${tamanho}" height="${tamanho}" aria-hidden="true" focusable="false" class="icone ${cls}"`);
+---
+
+<Fragment set:html={bruto} />

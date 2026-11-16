@@ -1,0 +1,40 @@
+---
+/** Marcas que a Girêh trabalha, em letra, assentadas como ladrilhos. Sem logos de terceiros. */
+import { marcas } from "../data/unidades";
+interface Props {
+  class?: string;
+}
+const { class: cls = "" } = Astro.props;
+---
+
+<ul class:list={["marcas", cls]} role="list" aria-label="Marcas que você encontra na Girêh">
+  {marcas.map((m) => <li>{m}</li>)}
+</ul>
+
+<style>
+  .marcas {
+    list-style: none;
+    margin: 0;
+    padding: var(--rejunte-w);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--rejunte-w);
+    background: var(--rejunte);
+  }
+  li {
+    flex: 1 1 9.5rem;
+    display: grid;
+    place-items: center;
+    min-height: 6.5rem;
+    padding: var(--e-4);
+    background: var(--branco-esmalte);
+    color: var(--azul-fachada);
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-stretch: 116%;
+    font-size: var(--fs-ladrilho);
+    line-height: 1.05;
+    text-align: center;
+    letter-spacing: -0.01em;
+  }
+</style>

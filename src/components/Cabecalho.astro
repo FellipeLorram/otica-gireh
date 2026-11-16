@@ -1,0 +1,175 @@
+---
+/**
+ * Cabeçalho: faixa azul-fachada com o logo, três caminhos e a ação.
+ * No celular a ação sai daqui e vai para a BarraAcao fixa embaixo.
+ */
+import Logo from "./Logo.astro";
+import Botao from "./Botao.astro";
+import Icone from "./Icone.astro";
+
+interface Props {
+  atual?: "inicio" | "lojas" | "exame" | "oculos";
+}
+const { atual } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const links = [
+  { id: "lojas", href: `${base}/lojas/`, texto: "Lojas" },
+  { id: "exame", href: `${base}/exame-de-vista/`, texto: "Exame de vista" },
+  { id: "oculos", href: `${base}/oculos-e-lentes/`, texto: "Óculos e lentes" },
+];
+---
+
+<header class="cabecalho campo-fachada" data-cabecalho>
+  <div class="envoltorio barra">
+    <a href={`${base}/`} class="marca" aria-label="Ótica Girêh, página inicial">
+      <Logo tom="esmalte" tamanho="1.45rem" />
+    </a>
+
+    <button class="menu-botao" type="button" aria-expanded="false" aria-controls="menu-principal" data-menu-botao>
+      <Icone nome="menu-2" tamanho={24} />
+      <span>Menu</span>
+    </button>
+
+    <nav id="menu-principal" class="menu" aria-label="Principal" data-menu>
+      <ul role="list">
+        {
+          links.map((l) => (
+            <li>
+              <a href={l.href} aria-current={atual === l.id ? "page" : undefined}>
+                {l.texto}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <Botao href={`${base}/#lojas`} variante="primario" icone="brand-whatsapp" class="cta-topo">
+        Pedir orçamento
+      </Botao>
+    </nav>
+  </div>
+</header>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-cabecalho]").forEach((cab) => {
+    const botao = cab.querySelector<HTMLButtonElement>("[data-menu-botao]")!;
+    botao.addEventListener("click", () => {
+      const aberto = botao.getAttribute("aria-expanded") === "true";
+      botao.setAttribute("aria-expanded", String(!aberto));
+      cab.classList.toggle("aberto", !aberto);
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && cab.classList.contains("aberto")) {
+        botao.setAttribute("aria-expanded", "false");
+        cab.classList.remove("aberto");
+        botao.focus();
+      }
+    });
+  });
+</script>
+
+<style>
+  .cabecalho {
+    background: var(--azul-fachada);
+    color: var(--branco-esmalte);
+    border-bottom: var(--rejunte-w) solid var(--azul-meio);
+  }
+  .barra {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--e-5);
+    min-height: 4.75rem;
+  }
+  .marca {
+    display: inline-flex;
+    padding: var(--e-2) 0;
+    text-decoration: none;
+  }
+  .menu {
+    display: flex;
+    align-items: center;
+    gap: var(--e-6);
+  }
+  .menu ul {
+    display: flex;
+    gap: var(--e-1);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .menu a:not(.botao) {
+    display: inline-flex;
+    align-items: center;
+    min-height: 3rem;
+    padding: 0 var(--e-3);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-stretch: 110%;
+    font-size: var(--fs-acao);
+    color: var(--branco-esmalte);
+    text-decoration: none;
+    border-bottom: 3px solid transparent;
+  }
+  .menu a:not(.botao):hover {
+    border-bottom-color: var(--azul-claro);
+  }
+  .menu a[aria-current="page"] {
+    border-bottom-color: var(--branco-esmalte);
+  }
+  .menu-botao {
+    display: none;
+    align-items: center;
+    gap: var(--e-2);
+    min-height: 3rem;
+    padding: 0 var(--e-3);
+    background: transparent;
+    color: var(--branco-esmalte);
+    border: 2px solid var(--azul-claro);
+    border-radius: var(--raio);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-stretch: 110%;
+    font-size: var(--fs-apoio);
+    cursor: pointer;
+  }
+
+  @media (max-width: 56rem) {
+    .barra {
+      flex-wrap: wrap;
+      min-height: 4.25rem;
+    }
+    .menu-botao {
+      display: inline-flex;
+    }
+    .menu {
+      display: none;
+      flex-basis: 100%;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      padding-bottom: var(--e-4);
+    }
+    .aberto .menu {
+      display: flex;
+    }
+    .menu ul {
+      flex-direction: column;
+    }
+    .menu a:not(.botao) {
+      display: flex;
+      min-height: 3.5rem;
+      font-size: var(--fs-corpo-g);
+      border-bottom: 0;
+      border-top: 2px solid var(--azul-meio);
+      padding: 0;
+    }
+    .menu a[aria-current="page"] {
+      text-decoration: underline;
+      text-decoration-thickness: 3px;
+      text-underline-offset: 0.3em;
+    }
+    .menu :global(.cta-topo) {
+      display: none;
+    }
+  }
+</style>

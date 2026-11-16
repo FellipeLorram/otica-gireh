@@ -1,0 +1,85 @@
+---
+/** Como funciona o orçamento: três passos assentados como ladrilhos numerados. */
+const passos = [
+  {
+    n: "1",
+    titulo: "Escolha a loja",
+    texto: "Caju, Pinheiro ou Baixa do Sapateiro. Cada loja atende no próprio WhatsApp.",
+  },
+  {
+    n: "2",
+    titulo: "Mande a foto da receita",
+    texto: "Uma foto nítida, com a receita inteira aparecendo. Se tiver preferência de armação, conte também.",
+  },
+  {
+    n: "3",
+    titulo: "Receba as opções e o valor",
+    texto: "A gente responde com as opções de lente e armação e o preço de cada uma. Aí é só passar na loja.",
+  },
+];
+---
+
+<ol class="passos" role="list">
+  {
+    passos.map((p) => (
+      <li class="passo">
+        <span class="n" aria-hidden="true">{p.n}</span>
+        <h3>
+          <span class="sr-only">Passo {p.n}: </span>
+          {p.titulo}
+        </h3>
+        <p>{p.texto}</p>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .passos {
+    list-style: none;
+    margin: 0;
+    padding: var(--rejunte-w);
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--rejunte-w);
+    background: var(--rejunte);
+  }
+  .passo {
+    display: grid;
+    align-content: start;
+    gap: var(--e-3);
+    padding: var(--e-6) var(--e-5) var(--e-6);
+    background: var(--branco-esmalte);
+  }
+  .n {
+    font-family: var(--font-display);
+    font-size: var(--fs-display);
+    font-weight: 820;
+    font-stretch: 125%;
+    line-height: 0.8;
+    color: var(--azul-meio);
+  }
+  h3 {
+    margin-top: var(--e-3);
+  }
+  p {
+    color: var(--texto-2);
+  }
+  @media (max-width: 48rem) {
+    .passos {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .passo {
+      grid-template-columns: 4rem minmax(0, 1fr);
+      column-gap: var(--e-4);
+      padding: var(--e-5);
+    }
+    .n {
+      grid-row: span 2;
+      font-size: var(--fs-titulo);
+    }
+    h3 {
+      margin-top: 0;
+    }
+  }
+</style>

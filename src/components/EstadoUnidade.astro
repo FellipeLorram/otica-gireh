@@ -1,0 +1,146 @@
+---
+/**
+ * Estado da loja agora, calculado no navegador pelo horário de Brasília (America/Sao_Paulo).
+ * Sem JavaScript, não mostra nada (melhor do que mostrar um estado errado).
+ */
+import type { Unidade } from "../data/unidades";
+interface Props {
+  unidade: Unidade;
+  exame?: boolean; // também avisa "exame hoje"
+  curto?: boolean; // texto curto para ladrilhos estreitos: "Aberto até 20h" / "Abre amanhã às 9h"
+  class?: string;
+}
+const { unidade: u, exame = true, curto = false, class: cls = "" } = Astro.props;
+---
+
+<span
+  class:list={["estado", cls]}
+  data-estado
+  data-horarios={JSON.stringify(u.horarios)}
+  data-exame={exame ? JSON.stringify(u.exame) : ""}
+  data-curto={curto ? "1" : undefined}
+  hidden
+>
+  <span class="selo-estado" data-estado-loja><span class="ponto" aria-hidden="true"></span><span data-txt></span></span>
+  <span class="selo-exame-hoje" data-estado-exame hidden></span>
+</span>
+
+<script>
+  type Faixa = { dias: number[]; abre: string; fecha: string };
+  type Exame = { modo: string; dia: number; inicio: string; fim: string; frequencia: string };
+  const NOMES = ["domingo", "segunda", "terça", "quarta", "quinta", "sexta", "sábado"];
+
+  const min = (h: string) => {
+    const [H, M] = h.split(":").map(Number);
+    return H * 60 + M;
+  };
+  const fmt = (h: string) => {
+    const [H, M] = h.split(":").map(Number);
+    return M ? `${H}h${String(M).padStart(2, "0")}` : `${H}h`;
+  };
+
+  function agoraSP() {
+    const p = new Intl.DateTimeFormat("en-US", {
+      timeZone: "America/Sao_Paulo",
+      weekday: "short",
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23",
+    }).formatToParts(new Date());
+    const get = (t: string) => p.find((x) => x.type === t)?.value ?? "0";
+    const dia = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].indexOf(get("weekday"));
+    return { dia, m: Number(get("hour")) * 60 + Number(get("minute")) };
+  }
+
+  function faixaDo(faixas: Faixa[], dia: number) {
+    return faixas.find((f) => f.dias.includes(dia));
+  }
+
+  function atualizar(el: HTMLElement) {
+    const faixas: Faixa[] = JSON.parse(el.dataset.horarios ?? "[]");
+    const exame: Exame | null = el.dataset.exame ? JSON.parse(el.dataset.exame) : null;
+    const { dia, m } = agoraSP();
+    const loja = el.querySelector<HTMLElement>("[data-estado-loja]")!;
+    const txt = el.querySelector<HTMLElement>("[data-txt]")!;
+    const hoje = faixaDo(faixas, dia);
+    const curto = el.dataset.curto === "1";
+    const pre = curto ? "" : "Fechado · ";
+
+    if (hoje && m >= min(hoje.abre) && m < min(hoje.fecha)) {
+      loja.className = "selo-estado aberto";
+      txt.textContent = curto ? `Aberto até ${fmt(hoje.fecha)}` : `Aberto agora · fecha às ${fmt(hoje.fecha)}`;
+    } else {
+      loja.className = "selo-estado fechado";
+      if (hoje && m < min(hoje.abre)) {
+        txt.textContent = `${pre}${curto ? "Abre" : "abre"} hoje às ${fmt(hoje.abre)}`;
+      } else {
+        for (let i = 1; i <= 7; i++) {
+          const d = (dia + i) % 7;
+          const f = faixaDo(faixas, d);
+          if (f) {
+            txt.textContent = `${pre}${curto ? "Abre" : "abre"} ${i === 1 ? "amanhã" : NOMES[d]} às ${fmt(f.abre)}`;
+            break;
+          }
+        }
+      }
+    }
+
+    const ex = el.querySelector<HTMLElement>("[data-estado-exame]")!;
+    if (exame && exame.frequencia === "semanal" && exame.dia === dia && m < min(exame.fim)) {
+      ex.textContent = `Exame hoje, ${fmt(exame.inicio)} às ${fmt(exame.fim)}`;
+      ex.hidden = false;
+    } else {
+      ex.hidden = true;
+    }
+    el.hidden = false;
+  }
+
+  const todos = document.querySelectorAll<HTMLElement>("[data-estado]");
+  todos.forEach(atualizar);
+  setInterval(() => todos.forEach(atualizar), 60_000);
+</script>
+
+<style>
+  .estado {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: var(--e-2);
+  }
+  .estado[hidden] {
+    display: none;
+  }
+  .selo-estado,
+  .selo-exame-hoje {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--e-2);
+    padding: 0.3rem 0.6rem;
+    border-radius: var(--raio);
+    font-family: var(--font-display);
+    font-size: var(--fs-mini);
+    font-weight: 680;
+    font-stretch: 108%;
+    line-height: 1.2;
+  }
+  .selo-exame-hoje[hidden] {
+    display: none;
+  }
+  .aberto {
+    background: var(--aberto-fundo);
+    color: var(--aberto-tinta);
+  }
+  .fechado {
+    background: var(--fechado-fundo);
+    color: var(--fechado-tinta);
+  }
+  .selo-exame-hoje {
+    background: var(--azul-fachada);
+    color: var(--branco-esmalte);
+  }
+  .ponto {
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+    background: currentColor;
+  }
+</style>

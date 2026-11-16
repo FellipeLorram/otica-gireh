@@ -1,0 +1,125 @@
+@import "@fontsource-variable/archivo/wdth.css";
+@import "@fontsource/atkinson-hyperlegible-next/400.css";
+@import "@fontsource/atkinson-hyperlegible-next/700.css";
+@import "./tokens.css";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scrollbar-color: var(--azul-meio) var(--azul-nevoa);
+  accent-color: var(--azul-fachada);
+  caret-color: var(--azul-fachada);
+}
+
+body {
+  margin: 0;
+  background: var(--azul-claro);
+  color: var(--azul-noite);
+  font-family: var(--font-texto);
+  font-size: var(--fs-corpo);
+  line-height: var(--lh-corpo);
+  font-variant-numeric: tabular-nums;
+}
+
+::selection {
+  background: var(--gema);
+  color: var(--azul-noite);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  margin: 0;
+  text-wrap: balance;
+  letter-spacing: -0.015em;
+}
+
+h1 {
+  font-size: var(--fs-display);
+  line-height: var(--lh-display);
+  font-weight: 820;
+  font-stretch: 125%;
+}
+
+h2 {
+  font-size: var(--fs-titulo);
+  line-height: var(--lh-titulo);
+  font-weight: 780;
+  font-stretch: 118%;
+}
+
+h3 {
+  font-size: var(--fs-subtitulo);
+  line-height: 1.12;
+  font-weight: 720;
+  font-stretch: 108%;
+}
+
+p {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+a {
+  color: inherit;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+:focus-visible {
+  outline: 3px solid var(--azul-noite);
+  outline-offset: 3px;
+}
+
+.campo-fachada :focus-visible {
+  outline-color: var(--gema);
+}
+
+.rotulo {
+  font-family: var(--font-display);
+  font-size: var(--fs-rotulo);
+  font-weight: 680;
+  font-stretch: 112%;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.envoltorio {
+  width: min(100% - 2 * var(--e-5), var(--largura));
+  margin-inline: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
