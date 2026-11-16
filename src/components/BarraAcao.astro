@@ -5,13 +5,20 @@
  * para não ter duas ações gema ao mesmo tempo.
  */
 import Icone from "./Icone.astro";
+interface Props {
+  /** Destino da ação. Padrão: as lojas da Início. Nas páginas de loja, o WhatsApp daquela loja. */
+  href?: string;
+  rotulo?: string;
+  externo?: boolean;
+}
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const { href = `${base}/#lojas`, rotulo = "Pedir orçamento", externo = false } = Astro.props;
 ---
 
 <div class="barra-acao" data-barra-acao>
-  <a href={`${base}/#lojas`} class="acao">
+  <a href={href} class="acao" target={externo ? "_blank" : undefined} rel={externo ? "noopener" : undefined}>
     <Icone nome="brand-whatsapp" tamanho={24} />
-    <span>Pedir orçamento</span>
+    <span>{rotulo}</span>
   </a>
 </div>
 

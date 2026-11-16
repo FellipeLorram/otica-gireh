@@ -72,6 +72,7 @@ const { unidade: u, exame = true, curto = false, class: cls = "" } = Astro.props
     } else {
       loja.className = "selo-estado fechado";
       if (hoje && m < min(hoje.abre)) {
+        loja.className = "selo-estado breve";
         txt.textContent = `${pre}${curto ? "Abre" : "abre"} hoje às ${fmt(hoje.abre)}`;
       } else {
         for (let i = 1; i <= 7; i++) {
@@ -128,6 +129,10 @@ const { unidade: u, exame = true, curto = false, class: cls = "" } = Astro.props
   .aberto {
     background: var(--aberto-fundo);
     color: var(--aberto-tinta);
+  }
+  .breve {
+    background: var(--azul-claro);
+    color: var(--azul-noite);
   }
   .fechado {
     background: var(--fechado-fundo);

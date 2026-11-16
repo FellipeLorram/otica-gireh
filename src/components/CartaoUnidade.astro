@@ -18,8 +18,10 @@ interface Props {
       Em listas de lojas, o WhatsApp vai em azul-fachada para respeitar a Regra da Gema. */
   destaque?: boolean;
   nivel?: "h2" | "h3";
+  /** Página da loja: o título vira link. */
+  href?: string;
 }
-const { unidade: u, demo = false, destaque = false, nivel = "h3" } = Astro.props;
+const { unidade: u, demo = false, destaque = false, nivel = "h3", href } = Astro.props;
 const Titulo = nivel;
 const comNumero = u.whatsapp ? u : demo ? { ...u, whatsapp: "5521000000000" } : null;
 const wa = comNumero ? linkWhatsApp(comNumero) : null;
@@ -31,7 +33,19 @@ const waExame = comNumero && u.exame.modo === "agendamento" ? linkWhatsApp(comNu
     <Ladrilho padrao={u.padrao} tom="fachada" rotulo={`Ladrilho da unidade ${u.nomeCurto}`} />
   </div>
   <div class="corpo">
-    <Titulo id={`un-${u.id}`} class="titulo"><span class="num">{u.numero}</span> {u.nome}</Titulo>
+    <Titulo id={`un-${u.id}`} class="titulo">
+      {
+        href ? (
+          <a href={href} class="titulo-link">
+            <span class="num">{u.numero}</span> {u.nome}
+          </a>
+        ) : (
+          <>
+            <span class="num">{u.numero}</span> {u.nome}
+          </>
+        )
+      }
+    </Titulo>
     <p class="bairro">{u.bairro}</p>
     <EstadoUnidade unidade={u} class="estado-cartao" />
 
@@ -136,6 +150,13 @@ const waExame = comNumero && u.exame.modo === "agendamento" ? linkWhatsApp(comNu
     flex-wrap: wrap;
     align-items: center;
     gap: var(--e-2) var(--e-3);
+  }
+  .titulo-link {
+    text-decoration: none;
+  }
+  .titulo-link:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 3px;
   }
   .tel {
     font-weight: 700;

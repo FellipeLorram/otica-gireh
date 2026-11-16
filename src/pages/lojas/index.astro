@@ -47,7 +47,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
                 proporcao="livre"
                 class="foto-fachada"
               />
-              <CartaoUnidade unidade={u} />
+              <CartaoUnidade unidade={u} href={`${base}/lojas/${slugDe[u.id]}/`} />
               <a class="ir" href={`${base}/lojas/${slugDe[u.id]}/`}>
                 <span>Tudo da {u.nome}</span>
                 <Icone nome="arrow-right" tamanho={22} class="seta" />

@@ -158,7 +158,7 @@ const descricao =
   </main>
 
   <Rodape />
-  <BarraAcao />
+  {wa ? <BarraAcao href={wa} rotulo={`WhatsApp da ${u.nomeCurto}`} externo /> : <BarraAcao />}
 </Base>
 
 <style>
