@@ -22,7 +22,9 @@ A maioria chega pelo celular, vinda do Instagram, do Google ou de indicação.
 
 ## Product Purpose
 
-Site da Ótica Girêh, ótica com três unidades. O site existe para transformar visita em **pedido de orçamento pelo WhatsApp** (ação nº 1: mandar a foto da receita), e em segundo plano levar ao exame de vista e à loja mais próxima.
+Site da Ótica Girêh, ótica com três unidades. O site existe para levar ao **exame de vista** (gratuito na compra; o hero da Início foca nele desde 16/11/2026) e ao **pedido de orçamento pelo WhatsApp** (mandar a foto da receita), sempre na loja certa.
+
+**Foco das próximas sessões:** daqui em diante, o trabalho é exclusivamente para a **Ótica Girêh Caju** (decisão do dono, 16/11/2026). As páginas das outras duas lojas já existem e ficam como estão.
 
 Sucesso = mais conversas de orçamento iniciadas no WhatsApp certo para cada unidade, e menos dúvidas repetidas sobre endereço, dia de exame e horário.
 
@@ -66,7 +68,8 @@ A ótica do bairro que resolve tudo num lugar só, perto de casa: exame de vista
 ## Evidence on Hand
 
 - Logo original: `assets/ref/logo-original.png` (baixa resolução; serve só de referência). Fachada da Caju: `assets/ref/fachada-caju.png`.
-- Fotos: nenhuma ainda. O site reserva espaços de imagem e uma lista de fotos necessárias vai ao dono. Nada de fotos de banco fingindo ser a loja.
+- Fotos e vídeos de lentes: vêm do domínio do próprio dono (uploadthing, ver `src/data/oculos.ts`), otimizados em `public/midia/oculos/`. O dono autorizou o reaproveitamento.
+- Fotos da loja: nenhuma ainda. O site reserva espaços de imagem e uma lista de fotos necessárias vai ao dono. Nada de fotos de banco fingindo ser a loja.
 - Avaliações do Google, nota, número de clientes, tempo de mercado: não verificados. Não inventar depoimentos, números ou anos de fundação.
 - Pesquisa e esboço de copy: `research/pesquisa.md`, `research/copy-esboco.md` (quase tudo marcado [CONFIRMAR]).
 

@@ -286,6 +286,15 @@ O piso 2x2 tem três ladrilhos de unidade (botões `role="radio"`) e o ladrilho 
 - **Movimento reduzido:** sem giro.
 - **Celular:** cada loja vira uma fileira (padrão à esquerda, texto de 16px à direita) e a ação fecha o piso, na largura toda.
 
+### HeroPagina e Secao (esqueleto de toda página)
+- **`HeroPagina`:** campo Azul-fachada, display em duas frases (a segunda em Azul-claro), sub, ações, o slot `lado` opcional e o barrado no fim. `semBarra` esconde a barra do celular quando há gema no topo.
+- **`Secao`:** os campos `claro` (padrão) e `fachada` alternam e nunca ficam duas `fachada` seguidas. O h2 e o lead são opcionais.
+
+As regras completas para criar páginas estão em `DIRETRIZ-PAGINAS.md`.
+
+### Orçamento em modo exame
+`Orcamento modo="exame"`: as placas mostram o dia e o modo do exame. Escolhida a loja, o gema leva ao mapa (exame por ordem de chegada, com ícone de pino) ou ao WhatsApp de agendamento. Uma faixa Azul-noite no pé do gema traz a segunda ação, "Já tem receita? Peça o orçamento".
+
 ### Como funciona
 Três passos numa faixa de ladrilhos esmalte com rejunte. O número fica em display Azul-meio e o título e o texto vêm embaixo. No celular, empilham com o número à esquerda.
 

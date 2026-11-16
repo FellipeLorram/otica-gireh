@@ -127,7 +127,7 @@ export function textoDiaExame(e: Exame): string {
 /** Versão curta para ladrilhos: "Sábados, 14h30–18h30" / "Sextas quinzenais, 14h30–18h30" */
 export function textoCurtoExame(e: Exame): string {
   const quando = e.frequencia === "quinzenal" ? `${DIAS_PLURAL[e.dia]} quinzenais` : DIAS_PLURAL[e.dia];
-  return `${quando}, ${hora(e.inicio)}–${hora(e.fim)}`;
+  return `${quando}, ${hora(e.inicio)}\u2060–\u2060${hora(e.fim)}`; // word joiner: não quebra no meio do horário
 }
 
 /** Linhas da tabela de horários: agrupa dias consecutivos com o mesmo horário. Domingo fechado. */
