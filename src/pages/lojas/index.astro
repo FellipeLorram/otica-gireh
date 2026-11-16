@@ -1,0 +1,165 @@
+---
+import Base from "../../layouts/Base.astro";
+import Cabecalho from "../../components/Cabecalho.astro";
+import Rodape from "../../components/Rodape.astro";
+import BarraAcao from "../../components/BarraAcao.astro";
+import Botao from "../../components/Botao.astro";
+import Icone from "../../components/Icone.astro";
+import Ladrilho from "../../components/Ladrilho.astro";
+import HeroPagina from "../../components/HeroPagina.astro";
+import Secao from "../../components/Secao.astro";
+import CartaoUnidade from "../../components/CartaoUnidade.astro";
+import AgendaExames from "../../components/AgendaExames.astro";
+import Orcamento from "../../components/Orcamento.astro";
+import EspacoImagem from "../../components/EspacoImagem.astro";
+import { unidades } from "../../data/unidades";
+import { slugDe, fotosDe } from "../../data/lojas";
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+
+<Base
+  titulo="Lojas no Caju e na Maré · Ótica Girêh"
+  descricao="As três lojas da Ótica Girêh: no Caju, na Vila do Pinheiro e na Baixa do Sapateiro (Maré). Endereço, horário e dia do exame. Chame a mais perto no WhatsApp."
+>
+  <Cabecalho atual="lojas" />
+
+  <main>
+    <HeroPagina
+      frases={["Três lojas,", "no Caju e na Maré."]}
+      sub="Cada loja tem horário, WhatsApp e dia de exame próprios. Escolha a mais perto de casa."
+      faixa="Exame de vista gratuito na compra dos óculos"
+    >
+      <div slot="lado" class="piso-padroes" aria-hidden="true">
+        {unidades.map((u) => <Ladrilho padrao={u.padrao} />)}
+        <Ladrilho padrao="lente" tom="claro" />
+      </div>
+    </HeroPagina>
+
+    <Secao id="lojas" titulo="Escolha a sua loja" lead="O selo mostra se a loja está aberta agora.">
+      <div class="lojas">
+        {
+          unidades.map((u) => (
+            <div class="loja" id={slugDe[u.id]}>
+              <EspacoImagem
+                codigo={fotosDe[u.id].fachada}
+                descricao={`Fachada da ${u.nome}, de frente, de dia`}
+                proporcao="livre"
+                class="foto-fachada"
+              />
+              <CartaoUnidade unidade={u} />
+              <a class="ir" href={`${base}/lojas/${slugDe[u.id]}/`}>
+                <span>Tudo da {u.nome}</span>
+                <Icone nome="arrow-right" tamanho={22} class="seta" />
+              </a>
+            </div>
+          ))
+        }
+      </div>
+    </Secao>
+
+    <Secao
+      id="exame"
+      campo="fachada"
+      titulo="Exame de vista em cada loja"
+      lead="Gratuito na compra dos óculos. Na Caju é por ordem de chegada. Na Pinheiro e na Baixa do Sapateiro, com horário marcado pelo WhatsApp."
+    >
+      <AgendaExames />
+      <div>
+        <Botao href={`${base}/exame-de-vista/`} variante="linha-clara" iconeFim="arrow-right">Tudo sobre o exame</Botao>
+      </div>
+    </Secao>
+
+    <Secao
+      id="orcamento"
+      titulo="Já sabe a loja? Mande a receita."
+      lead="Escolha a loja e mande a foto da receita no WhatsApp dela. A gente responde com as opções e o valor."
+      semBarra
+    >
+      <div class="orc">
+        <Orcamento />
+      </div>
+    </Secao>
+  </main>
+
+  <Rodape />
+  <BarraAcao />
+</Base>
+
+<style>
+  /* Os padrões das três lojas e o da marca, num piso 2x2. */
+  .piso-padroes {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--rejunte-w);
+    padding: var(--rejunte-w);
+    background: var(--rejunte);
+    max-width: 20rem;
+    margin-inline-start: auto;
+  }
+  @media (max-width: 56rem) {
+    .piso-padroes {
+      display: none;
+    }
+  }
+
+  /* As três lojas num piso só: foto da fachada, cartão e link, com rejunte entre tudo. */
+  .lojas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 21rem), 1fr));
+    gap: var(--rejunte-w);
+    padding: var(--rejunte-w);
+    background: var(--rejunte);
+  }
+  .loja {
+    display: flex;
+    flex-direction: column;
+    gap: var(--rejunte-w);
+    scroll-margin-top: var(--e-5);
+  }
+  .loja :global(.unidade) {
+    flex: 1;
+    height: auto;
+    border: 0;
+  }
+  .loja :global(.foto-fachada) {
+    aspect-ratio: 4 / 5;
+    border: 0;
+  }
+  .ir {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--e-3);
+    min-height: var(--alvo);
+    padding: var(--e-3) var(--e-5);
+    background: var(--branco-esmalte);
+    font-family: var(--font-display);
+    font-size: var(--fs-acao);
+    font-weight: 720;
+    font-stretch: 112%;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.2em;
+  }
+  .ir :global(.seta) {
+    flex: none;
+    transition: transform var(--dur-rapido) ease-out;
+  }
+  .ir:hover {
+    background: var(--azul-fachada);
+    color: var(--branco-esmalte);
+  }
+  .ir:hover :global(.seta) {
+    transform: translateX(3px);
+  }
+  @media (max-width: 40rem) {
+    .loja :global(.foto-fachada) {
+      aspect-ratio: 4 / 3;
+    }
+  }
+
+  .orc {
+    max-width: 40rem;
+  }
+</style>

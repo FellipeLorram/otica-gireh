@@ -1,0 +1,130 @@
+---
+import Base from "../layouts/Base.astro";
+import Cabecalho from "../components/Cabecalho.astro";
+import Rodape from "../components/Rodape.astro";
+import BarraAcao from "../components/BarraAcao.astro";
+import Icone from "../components/Icone.astro";
+import HeroPagina from "../components/HeroPagina.astro";
+import Secao from "../components/Secao.astro";
+import Orcamento from "../components/Orcamento.astro";
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const caminhos = [
+  { href: `${base}/`, titulo: "Início", texto: "Orçamento pela foto da receita no WhatsApp.", icone: "home" },
+  { href: `${base}/lojas/`, titulo: "Lojas", texto: "Endereço, horário e WhatsApp das três lojas.", icone: "map-pin" },
+  {
+    href: `${base}/exame-de-vista/`,
+    titulo: "Exame de vista",
+    texto: "Gratuito na compra dos óculos.",
+    icone: "eye",
+  },
+];
+---
+
+<Base
+  titulo="Página não encontrada · Ótica Girêh"
+  descricao="Essa página da Ótica Girêh não existe mais. Veja as lojas do Caju, da Vila do Pinheiro e da Baixa do Sapateiro, o exame de vista e o orçamento pelo WhatsApp."
+>
+  <meta slot="head" name="robots" content="noindex" />
+
+  <Cabecalho />
+
+  <main>
+    <HeroPagina
+      frases={["Essa página", "não existe."]}
+      sub="O endereço pode ter mudado. Escolha por onde seguir."
+    >
+      <nav slot="lado" aria-label="Por onde seguir">
+        <ul class="caminhos" role="list">
+          {
+            caminhos.map((c) => (
+              <li>
+                <a href={c.href}>
+                  <Icone nome={c.icone} tamanho={26} class="ic" />
+                  <span class="txt">
+                    <span class="t">{c.titulo}</span>
+                    <span class="s">{c.texto}</span>
+                  </span>
+                  <Icone nome="arrow-right" tamanho={24} class="seta" />
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+    </HeroPagina>
+
+    <Secao
+      titulo="Quer um orçamento?"
+      lead="Escolha a loja e mande a foto da receita no WhatsApp dela."
+      semBarra
+    >
+      <div class="orc">
+        <Orcamento />
+      </div>
+    </Secao>
+  </main>
+
+  <Rodape />
+  <BarraAcao />
+</Base>
+
+<style>
+  /* Os caminhos assentados num piso: linhas esmalte com rejunte. */
+  .caminhos {
+    display: grid;
+    gap: var(--rejunte-w);
+    padding: var(--rejunte-w);
+    margin: 0;
+    list-style: none;
+    background: var(--rejunte);
+  }
+  .caminhos a {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--e-4);
+    min-height: var(--alvo);
+    padding: var(--e-4) var(--e-5);
+    background: var(--branco-esmalte);
+    color: var(--azul-noite);
+    text-decoration: none;
+  }
+  .caminhos :global(.ic) {
+    color: var(--azul-fachada);
+  }
+  .txt {
+    display: grid;
+    gap: var(--e-1);
+  }
+  .t {
+    font-family: var(--font-display);
+    font-size: var(--fs-subtitulo);
+    font-weight: 720;
+    font-stretch: 108%;
+    line-height: 1.12;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.2em;
+  }
+  .s {
+    color: var(--texto-2);
+    font-size: var(--fs-apoio);
+  }
+  .caminhos :global(.seta) {
+    transition: transform var(--dur-rapido) ease-out;
+  }
+  .caminhos a:hover {
+    background: var(--azul-nevoa);
+  }
+  .caminhos a:hover :global(.seta) {
+    transform: translateX(3px);
+  }
+  .orc {
+    max-width: 40rem;
+  }
+  .caminhos a:focus-visible {
+    outline-color: var(--azul-noite);
+    outline-offset: -6px;
+  }
+</style>
