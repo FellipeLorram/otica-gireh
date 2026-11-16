@@ -1,0 +1,131 @@
+---
+/**
+ * Como funciona o exame: dois jeitos, lado a lado, num piso de ladrilhos.
+ * Chegar (lojas com exame por ordem de chegada) e agendar (lojas com agendamento).
+ * Dias, horários e telefones vêm de unidades.ts.
+ */
+import Ladrilho from "../Ladrilho.astro";
+import { unidades, hora, DIAS, type Unidade } from "../../data/unidades";
+
+const chegada = unidades.filter((u) => u.exame.modo === "chegada");
+const agendamento = unidades.filter((u) => u.exame.modo === "agendamento");
+
+const nomes = (lista: Unidade[]) =>
+  lista.map((u) => `na ${u.nomeCurto}`).join(" e ").replace(/^n/, "N");
+const faixa = (u: Unidade) => `das ${hora(u.exame.inicio)} às ${hora(u.exame.fim)}`;
+const diaDe = (u: Unidade) =>
+  u.exame.frequencia === "quinzenal" ? `${DIAS[u.exame.dia]}, a cada 15 dias` : DIAS[u.exame.dia];
+const telefones = [...new Set(agendamento.map((u) => u.telefone).filter(Boolean))];
+
+const modos = [
+  {
+    id: "chegar",
+    titulo: `${nomes(chegada)}, é só chegar`,
+    lojas: chegada,
+    passos: [
+      ...chegada.map((u) => `Venha no ${diaDe(u)}, ${faixa(u)}.`),
+      "O exame é por ordem de chegada. Não precisa marcar.",
+      "O exame é gratuito na compra dos óculos.",
+    ],
+  },
+  {
+    id: "agendar",
+    titulo: `${nomes(agendamento)}, marque antes`,
+    lojas: agendamento,
+    passos: [
+      `Chame a loja no WhatsApp${telefones.length === 1 ? ` ${telefones[0]}` : ""} e marque o horário.`,
+      ...agendamento.map(
+        (u) =>
+          `${u.nomeCurto}: ${diaDe(u)}, ${faixa(u)}.${u.exame.frequencia === "quinzenal" ? ` A loja confirma qual é a próxima ${DIAS[u.exame.dia]}.` : ""}`,
+      ),
+      "Chegue no horário marcado. O exame é gratuito na compra dos óculos.",
+    ],
+  },
+];
+---
+
+<div class="modos">
+  {
+    modos.map((m) => (
+      <section class="modo" aria-labelledby={`modo-${m.id}`}>
+        <div class="cabeca">
+          <span class="pecas" aria-hidden="true">
+            {m.lojas.map((u) => (
+              <span class="peca">
+                <Ladrilho padrao={u.padrao} tom="fachada" />
+              </span>
+            ))}
+          </span>
+          <h3 id={`modo-${m.id}`}>{m.titulo}</h3>
+        </div>
+        <ol class="passos" role="list">
+          {m.passos.map((p, i) => (
+            <li>
+              <span class="n" aria-hidden="true">{i + 1}</span>
+              <span>{p}</span>
+            </li>
+          ))}
+        </ol>
+      </section>
+    ))
+  }
+</div>
+
+<style>
+  .modos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--rejunte-w);
+    padding: var(--rejunte-w);
+    background: var(--rejunte);
+  }
+  .modo {
+    display: grid;
+    align-content: start;
+    gap: var(--e-5);
+    padding: var(--e-6) var(--e-5);
+    background: var(--branco-esmalte);
+    color: var(--azul-noite);
+  }
+  .cabeca {
+    display: grid;
+    gap: var(--e-4);
+  }
+  .pecas {
+    display: flex;
+    gap: var(--rejunte-w);
+  }
+  .peca {
+    width: 3.5rem;
+    outline: var(--rejunte-w) solid var(--rejunte);
+  }
+  .passos {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--e-4);
+  }
+  .passos li {
+    display: grid;
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+    gap: var(--e-3);
+    align-items: baseline;
+  }
+  .n {
+    font-family: var(--font-display);
+    font-size: var(--fs-subtitulo);
+    font-weight: 820;
+    font-stretch: 125%;
+    line-height: 1;
+    color: var(--azul-meio);
+  }
+  @media (max-width: 48rem) {
+    .modos {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .modo {
+      padding: var(--e-5);
+    }
+  }
+</style>

@@ -1,0 +1,211 @@
+---
+/**
+ * Agenda do exame por loja: um ladrilho esmalte por unidade, assentados num piso só.
+ * Cada ladrilho junta o dia, o horário, o modo, o endereço e a ação certa:
+ * Caju (ordem de chegada) leva ao mapa; Pinheiro e Baixa (agendamento) abrem o WhatsApp.
+ * Tudo vem de unidades.ts.
+ */
+import Ladrilho from "../Ladrilho.astro";
+import Selo from "../Selo.astro";
+import Botao from "../Botao.astro";
+import Icone from "../Icone.astro";
+import EstadoUnidade from "../EstadoUnidade.astro";
+import { unidades, textoExame, hora, DIAS, linkWhatsApp, mensagemExame } from "../../data/unidades";
+
+/** "Todo sábado" / "Toda sexta" / "Sextas, a cada 15 dias" */
+function quando(dia: number, frequencia: "semanal" | "quinzenal") {
+  const nome = DIAS[dia];
+  if (frequencia === "quinzenal") return `${nome[0].toUpperCase()}${nome.slice(1)}s, a cada 15 dias`;
+  return `${dia === 0 || dia === 6 ? "Todo" : "Toda"} ${nome}`;
+}
+
+const lojas = unidades.map((u) => {
+  const agenda = u.exame.modo === "agendamento";
+  return {
+    u,
+    dia: quando(u.exame.dia, u.exame.frequencia),
+    horas: `das ${hora(u.exame.inicio)} às ${hora(u.exame.fim)}`,
+    nota: agenda
+      ? u.exame.frequencia === "quinzenal"
+        ? `Confirme no WhatsApp qual é a próxima ${DIAS[u.exame.dia]} e marque o horário.`
+        : "Marque o horário antes pelo WhatsApp."
+      : "É só chegar, não precisa marcar. Quem chega antes é atendido antes.",
+    wa: linkWhatsApp(u, mensagemExame(u)),
+    agenda,
+  };
+});
+---
+
+<ul class="agenda-lojas" role="list">
+  {
+    lojas.map(({ u, dia, horas, nota, wa, agenda }) => (
+      <li class="loja" aria-labelledby={`ex-${u.id}`}>
+        <span class="canto" aria-hidden="true">
+          <Ladrilho padrao={u.padrao} tom="fachada" />
+        </span>
+        <h3 id={`ex-${u.id}`} class="nome">
+          <span class="num">{u.numero}</span> {u.nomeCurto}
+        </h3>
+        {u.bairro !== u.nomeCurto && <p class="bairro">{u.bairro}</p>}
+
+        <p class="quando">
+          <span class="dia">{dia}</span>
+          <span class="horas">{horas}</span>
+        </p>
+        <div class="selos">
+          <Selo tipo="exame">{textoExame[u.exame.modo]}</Selo>
+          <EstadoUnidade unidade={u} curto />
+        </div>
+        <p class="nota">{nota}</p>
+
+        <p class="endereco">
+          <Icone nome="map-pin" tamanho={20} />
+          <span>{u.endereco}</span>
+        </p>
+
+        <div class="acoes">
+          {agenda ? (
+            <>
+              {wa && (
+                <Botao href={wa} externo variante="fachada" icone="brand-whatsapp">
+                  Agendar pelo WhatsApp
+                </Botao>
+              )}
+              {u.mapa && (
+                <Botao href={u.mapa} externo variante="linha" icone="route">
+                  Como chegar
+                </Botao>
+              )}
+            </>
+          ) : (
+            <>
+              {u.mapa && (
+                <Botao href={u.mapa} externo variante="fachada" icone="route">
+                  Como chegar
+                </Botao>
+              )}
+              {wa && (
+                <Botao href={wa} externo variante="linha" icone="brand-whatsapp">
+                  Tirar dúvida
+                </Botao>
+              )}
+            </>
+          )}
+          {u.telefone && <span class="tel">WhatsApp {u.telefone}</span>}
+        </div>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .agenda-lojas {
+    list-style: none;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--rejunte-w);
+    padding: var(--rejunte-w);
+    background: var(--rejunte);
+  }
+  .loja {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--e-3);
+    padding: var(--e-5);
+    background: var(--branco-esmalte);
+    color: var(--azul-noite);
+  }
+  .canto {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 4.5rem;
+    border-left: var(--rejunte-w) solid var(--rejunte);
+    border-bottom: var(--rejunte-w) solid var(--rejunte);
+  }
+  .nome {
+    padding-right: 5rem;
+  }
+  .num {
+    color: var(--azul-meio);
+    margin-right: 0.1em;
+  }
+  .bairro {
+    margin-top: calc(-1 * var(--e-2));
+    color: var(--texto-2);
+    padding-right: 5rem;
+  }
+  .quando {
+    display: grid;
+    gap: var(--e-1);
+    margin-top: var(--e-3);
+    padding-top: var(--e-4);
+    border-top: 2px solid var(--azul-nevoa);
+  }
+  .dia {
+    font-family: var(--font-display);
+    font-size: var(--fs-subtitulo);
+    font-weight: 780;
+    font-stretch: 112%;
+    line-height: 1.08;
+    color: var(--azul-fachada);
+  }
+  .horas {
+    font-family: var(--font-display);
+    font-size: var(--fs-ladrilho);
+    font-weight: 700;
+    font-stretch: 106%;
+    line-height: 1.15;
+  }
+  .selos {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--e-2);
+  }
+  .nota {
+    color: var(--texto-2);
+  }
+  .endereco {
+    display: grid;
+    grid-template-columns: 1.25rem minmax(0, 1fr);
+    gap: var(--e-2);
+    align-items: start;
+    font-size: var(--fs-apoio);
+    line-height: 1.4;
+    color: var(--texto-2);
+  }
+  .endereco :global(.icone) {
+    color: var(--azul-fachada);
+    margin-top: 0.1rem;
+  }
+  .acoes {
+    display: grid;
+    gap: var(--e-3);
+    margin-top: auto;
+    padding-top: var(--e-3);
+  }
+  .tel {
+    font-size: var(--fs-apoio);
+    font-weight: 700;
+    color: var(--texto-2);
+    font-variant-numeric: tabular-nums;
+  }
+  @media (max-width: 60rem) {
+    .agenda-lojas {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .acoes {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+  }
+  @media (max-width: 34rem) {
+    .acoes {
+      display: grid;
+    }
+  }
+</style>

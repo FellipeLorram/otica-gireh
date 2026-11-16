@@ -1,0 +1,154 @@
+---
+import Base from "../layouts/Base.astro";
+import Cabecalho from "../components/Cabecalho.astro";
+import Rodape from "../components/Rodape.astro";
+import BarraAcao from "../components/BarraAcao.astro";
+import Botao from "../components/Botao.astro";
+import Orcamento from "../components/Orcamento.astro";
+import HeroPagina from "../components/HeroPagina.astro";
+import Secao from "../components/Secao.astro";
+import Ladrilho from "../components/Ladrilho.astro";
+import EspacoImagem from "../components/EspacoImagem.astro";
+import AgendaLojas from "../components/exame/AgendaLojas.astro";
+import ModosExame from "../components/exame/ModosExame.astro";
+import Perguntas from "../components/exame/Perguntas.astro";
+import { unidades } from "../data/unidades";
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+
+<Base
+  titulo="Exame de vista · Ótica Girêh"
+  descricao="Exame de vista gratuito na compra dos óculos. Sábado na Caju, por ordem de chegada. Na Pinheiro e na Baixa do Sapateiro, na Maré, marque pelo WhatsApp."
+>
+  <Cabecalho atual="exame" />
+
+  <main>
+    <HeroPagina
+      frases={["Exame de vista", "gratuito na compra dos óculos."]}
+      sub="Sábado na Caju e na Pinheiro, sexta na Baixa do Sapateiro. Escolha a loja mais perto."
+      faixa="Na Caju é só chegar. Na Pinheiro e na Baixa, marque pelo WhatsApp."
+      semBarra
+    >
+      <div slot="acoes" class="so-desktop">
+        <Botao href="#agenda" variante="linha-clara" iconeFim="arrow-down">Ver o dia de cada loja</Botao>
+      </div>
+      <Orcamento slot="lado" modo="exame" />
+    </HeroPagina>
+
+    <Secao
+      id="agenda"
+      titulo="O dia do exame em cada loja"
+      lead="Cada loja tem o seu dia e o seu jeito. Veja onde fica mais fácil para você."
+    >
+      <AgendaLojas />
+    </Secao>
+
+    <Secao campo="fachada" titulo="Chegar ou marcar" lead="O exame é o mesmo. Só muda como você entra na fila.">
+      <ModosExame />
+    </Secao>
+
+    <Secao titulo="Perguntas frequentes">
+      <div class="duvidas">
+        <Perguntas />
+        <EspacoImagem
+          codigo="F07"
+          descricao="A sala ou o cantinho do exame, com o equipamento"
+          proporcao="livre"
+          class="foto-exame"
+        />
+      </div>
+    </Secao>
+
+    <Secao campo="fachada" semBarra class="fechamento">
+      <div class="fecho">
+        <div class="fecho-texto">
+          <h2>Já tem receita? Peça o orçamento.</h2>
+          <p class="fecho-sub">
+            Mande a foto da receita no WhatsApp da loja mais perto. A gente responde com as opções de lente e armação e
+            o valor.
+          </p>
+          <div>
+            <Botao href={`${base}/#lojas`} variante="primario" icone="brand-whatsapp" iconeFim="arrow-right">
+              Pedir orçamento
+            </Botao>
+          </div>
+        </div>
+        <div class="fecho-piso" aria-hidden="true">
+          {unidades.map((u) => <Ladrilho padrao={u.padrao} tom="claro" />)}
+          <Ladrilho padrao="lente" tom="claro" />
+        </div>
+      </div>
+    </Secao>
+  </main>
+
+  <Rodape />
+  <BarraAcao />
+</Base>
+
+<style>
+  @media (max-width: 56rem) {
+    .so-desktop {
+      display: none;
+    }
+  }
+
+  /* Perguntas à esquerda, a foto do cantinho do exame à direita. */
+  .duvidas {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    gap: var(--e-6);
+    align-items: start;
+  }
+  .duvidas :global(.foto-exame) {
+    aspect-ratio: 4 / 5;
+  }
+  @media (max-width: 48rem) {
+    .duvidas {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .duvidas :global(.foto-exame) {
+      aspect-ratio: 3 / 2;
+    }
+  }
+
+  .fecho {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    gap: var(--e-7);
+    align-items: center;
+  }
+  .fecho-texto {
+    display: grid;
+    gap: var(--e-5);
+  }
+  .fecho-texto h2 {
+    max-width: 18ch;
+  }
+  .fecho-sub {
+    max-width: 44ch;
+    font-size: var(--fs-corpo-g);
+    color: var(--texto-2-escuro);
+  }
+  .fecho-piso {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--rejunte-w);
+    padding: var(--rejunte-w);
+    background: var(--azul-meio);
+    width: 100%;
+    max-width: 20rem;
+    justify-self: end;
+  }
+  @media (max-width: 48rem) {
+    .fecho {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--e-6);
+    }
+    .fecho-piso {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      max-width: none;
+      justify-self: stretch;
+    }
+  }
+</style>

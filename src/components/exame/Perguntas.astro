@@ -1,0 +1,139 @@
+---
+/**
+ * Perguntas frequentes do exame em sanfona (<details>), assentadas num piso de ladrilhos.
+ * Só respostas confirmadas. Dias, horários e telefones vêm de unidades.ts.
+ */
+import Icone from "../Icone.astro";
+import { unidades, hora, DIAS, linkWhatsApp, mensagemExame } from "../../data/unidades";
+
+const caju = unidades.find((u) => u.id === "caju")!;
+const pinheiro = unidades.find((u) => u.id === "pinheiro")!;
+const baixa = unidades.find((u) => u.id === "baixa")!;
+const faixa = (h: { inicio: string; fim: string }) => `das ${hora(h.inicio)} às ${hora(h.fim)}`;
+const waBaixa = linkWhatsApp(baixa, mensagemExame(baixa));
+
+const perguntas = [
+  {
+    p: "Preciso comprar os óculos?",
+    r: [
+      "O exame de vista é gratuito na compra dos óculos. Se tiver alguma dúvida sobre o seu caso, pergunte no WhatsApp da loja.",
+    ],
+  },
+  {
+    p: "Preciso marcar horário?",
+    r: [
+      `Na ${caju.nomeCurto}, não. O exame é por ordem de chegada, todo ${DIAS[caju.exame.dia]}, ${faixa(caju.exame)}.`,
+      `Na ${pinheiro.nomeCurto} e na ${baixa.nomeCurto}, sim. Marque o horário pelo WhatsApp da loja.`,
+    ],
+  },
+  {
+    p: `Como sei qual é a próxima ${DIAS[baixa.exame.dia]} na ${baixa.nomeCurto}?`,
+    r: [
+      `Lá o exame é numa ${DIAS[baixa.exame.dia]} a cada 15 dias, ${faixa(baixa.exame)}. Mande uma mensagem no WhatsApp ${baixa.telefone} e a loja confirma a data.`,
+    ],
+    link: waBaixa ? { href: waBaixa, texto: "Perguntar no WhatsApp" } : null,
+  },
+  {
+    p: "Qual é o WhatsApp de cada loja?",
+    r: unidades.map((u) => `${u.nome}: ${u.telefone}.`),
+  },
+];
+---
+
+<div class="perguntas">
+  {
+    perguntas.map((q, i) => (
+      <details class="pergunta" open={i === 0}>
+        <summary>
+          <span class="texto">{q.p}</span>
+          <Icone nome="chevron-down" tamanho={26} class="seta" />
+        </summary>
+        <div class="resposta">
+          {q.r.map((t) => (
+            <p>{t}</p>
+          ))}
+          {q.link && (
+            <a class="link" href={q.link.href} target="_blank" rel="noopener">
+              <Icone nome="brand-whatsapp" tamanho={20} />
+              {q.link.texto}
+            </a>
+          )}
+        </div>
+      </details>
+    ))
+  }
+</div>
+
+<style>
+  .perguntas {
+    display: grid;
+    gap: var(--rejunte-w);
+    padding: var(--rejunte-w);
+    background: var(--rejunte);
+  }
+  .pergunta {
+    background: var(--branco-esmalte);
+    color: var(--azul-noite);
+  }
+  summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--e-4);
+    min-height: var(--alvo);
+    padding: var(--e-4) var(--e-5);
+    cursor: pointer;
+    list-style: none;
+    font-family: var(--font-display);
+    font-size: var(--fs-ladrilho);
+    font-weight: 720;
+    font-stretch: 108%;
+    line-height: 1.2;
+    transition: background-color var(--dur-rapido) ease-out;
+  }
+  summary::-webkit-details-marker {
+    display: none;
+  }
+  summary:hover {
+    background: var(--azul-nevoa);
+  }
+  summary:focus-visible {
+    outline-offset: -4px;
+  }
+  .pergunta[open] summary {
+    background: var(--azul-fachada);
+    color: var(--branco-esmalte);
+  }
+  .pergunta[open] summary:focus-visible {
+    outline-color: var(--gema);
+  }
+  summary :global(.seta) {
+    flex: none;
+    color: var(--azul-fachada);
+    transition: transform var(--dur-assenta) var(--ease-assenta);
+  }
+  .pergunta[open] summary :global(.seta) {
+    transform: rotate(180deg);
+    color: var(--azul-claro);
+  }
+  .resposta {
+    display: grid;
+    gap: var(--e-3);
+    max-width: var(--medida);
+    padding: var(--e-4) var(--e-5) var(--e-5);
+  }
+  .link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--e-2);
+    min-height: 2.75rem;
+    font-family: var(--font-display);
+    font-size: var(--fs-acao);
+    font-weight: 720;
+    font-stretch: 108%;
+    color: var(--azul-fachada);
+  }
+  .link:hover {
+    color: var(--azul-noite);
+  }
+</style>
