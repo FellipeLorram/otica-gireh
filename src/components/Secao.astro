@@ -1,0 +1,66 @@
+---
+/**
+ * Seção padrão de página. Dois campos possíveis:
+ * claro   = o chão da página (azul-claro)
+ * fachada = campo azul-fachada, texto esmalte (use para alternar e dar peso)
+ * O título (h2) e o lead são opcionais; o conteúdo vem no slot e já sai empilhado.
+ */
+interface Props {
+  id?: string;
+  campo?: "claro" | "fachada";
+  titulo?: string;
+  lead?: string;
+  semBarra?: boolean; // marque quando a seção tiver uma ação gema (esconde a barra do celular)
+  class?: string;
+}
+const { id, campo = "claro", titulo, lead, semBarra = false, class: cls = "" } = Astro.props;
+const idTitulo = titulo ? `${id ?? "s"}-titulo-${Math.random().toString(36).slice(2, 6)}` : undefined;
+---
+
+<section
+  id={id}
+  class:list={["secao", `campo-${campo}`, cls]}
+  aria-labelledby={idTitulo}
+  data-sem-barra={semBarra ? "" : undefined}
+>
+  <div class="envoltorio pilha">
+    {titulo && <h2 id={idTitulo}>{titulo}</h2>}
+    {lead && <p class="lead">{lead}</p>}
+    <slot />
+  </div>
+</section>
+
+<style>
+  .secao {
+    padding: var(--e-9) 0;
+  }
+  @media (max-width: 48rem) {
+    .secao {
+      padding: var(--e-8) 0;
+    }
+  }
+  .campo-claro {
+    background: var(--azul-claro);
+  }
+  .campo-fachada {
+    background: var(--azul-fachada);
+    color: var(--branco-esmalte);
+  }
+  .pilha {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--e-5);
+  }
+  .pilha > h2 {
+    max-width: 22ch;
+  }
+  .lead {
+    max-width: var(--medida);
+    font-size: var(--fs-corpo-g);
+    color: var(--texto-2);
+    margin-top: calc(-1 * var(--e-2));
+  }
+  .campo-fachada .lead {
+    color: var(--texto-2-escuro);
+  }
+</style>

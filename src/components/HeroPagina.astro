@@ -1,0 +1,85 @@
+---
+/**
+ * Topo de página interna: campo azul-fachada, título display em duas frases
+ * (a segunda em azul-claro), subtítulo e ações. O slot "lado" recebe um piso de
+ * ladrilhos ou outro bloco à direita (embaixo no celular). Fecha com o barrado.
+ */
+import Barrado from "./Barrado.astro";
+interface Props {
+  frases: [string] | [string, string];
+  sub?: string;
+  faixa?: string; // texto opcional do barrado logo abaixo
+  semBarra?: boolean; // marque se o lado tiver ação gema
+}
+const { frases, sub, faixa, semBarra = false } = Astro.props;
+const temLado = Astro.slots.has("lado");
+---
+
+<section class="hero campo-fachada" aria-labelledby="h-pagina" data-sem-barra={semBarra ? "" : undefined}>
+  <div class:list={["envoltorio", "hero-grade", { "com-lado": temLado }]}>
+    <div class="hero-texto">
+      <h1 id="h-pagina">
+        {frases.map((f) => <span class="frase">{f}</span>)}
+      </h1>
+      {sub && <p class="hero-sub">{sub}</p>}
+      {Astro.slots.has("acoes") && <div class="hero-acoes"><slot name="acoes" /></div>}
+    </div>
+    {temLado && <div class="hero-lado"><slot name="lado" /></div>}
+  </div>
+</section>
+{faixa ? <Barrado>{faixa}</Barrado> : <Barrado />}
+
+<style>
+  .hero {
+    background: var(--azul-fachada);
+    color: var(--branco-esmalte);
+    padding: var(--e-7) 0 var(--e-8);
+  }
+  .hero-grade {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--e-7);
+    align-items: center;
+  }
+  .hero-grade.com-lado {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  }
+  .hero-texto {
+    display: grid;
+    gap: var(--e-5);
+  }
+  .frase {
+    display: block;
+  }
+  .frase + .frase {
+    color: var(--azul-claro);
+  }
+  .hero-sub {
+    max-width: 44ch;
+    font-size: var(--fs-corpo-g);
+    color: var(--texto-2-escuro);
+  }
+  .hero-acoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--e-3);
+  }
+  .hero-lado {
+    width: 100%;
+    max-width: 36rem;
+    justify-self: end;
+  }
+  @media (max-width: 56rem) {
+    .hero {
+      padding: var(--e-6) 0 var(--e-7);
+    }
+    .hero-grade.com-lado {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--e-6);
+    }
+    .hero-lado {
+      justify-self: stretch;
+      max-width: none;
+    }
+  }
+</style>

@@ -6,6 +6,8 @@ import BarraAcao from "../components/BarraAcao.astro";
 import Barrado from "../components/Barrado.astro";
 import Botao from "../components/Botao.astro";
 import Orcamento from "../components/Orcamento.astro";
+import HeroPagina from "../components/HeroPagina.astro";
+import Secao from "../components/Secao.astro";
 import ComoFunciona from "../components/ComoFunciona.astro";
 import AgendaExames from "../components/AgendaExames.astro";
 import CartaoUnidade from "../components/CartaoUnidade.astro";
@@ -30,91 +32,65 @@ const jsonld = {
   <Cabecalho atual="inicio" />
 
   <main>
-    <section class="hero campo-fachada" id="inicio" aria-labelledby="h-hero" data-sem-barra>
-      <div class="envoltorio hero-grade">
-        <div class="hero-texto">
-          <h1 id="h-hero">
-            <span class="frase">Exame de vista</span>
-            <span class="frase">gratuito na compra dos óculos.</span>
-          </h1>
-          <p class="hero-sub">
-            Na Caju, é só chegar no sábado à tarde. Na Pinheiro e na Baixa do Sapateiro, o exame é com horário marcado
-            pelo WhatsApp.
-          </p>
-          <div class="hero-acoes">
-            <Botao href="#lojas" variante="linha-clara" iconeFim="arrow-down">Ver lojas e horários</Botao>
-          </div>
-        </div>
-        <div class="hero-piso">
-          <Orcamento modo="exame" />
-        </div>
+    <HeroPagina
+      frases={["Exame de vista", "gratuito na compra dos óculos."]}
+      sub="Na Caju, é só chegar no sábado à tarde. Na Pinheiro e na Baixa do Sapateiro, o exame é com horário marcado pelo WhatsApp."
+      faixa="Já tem receita? Mande a foto no WhatsApp e receba o orçamento."
+      semBarra
+    >
+      <div slot="acoes" class="so-desktop">
+        <Botao href="#lojas" variante="linha-clara" iconeFim="arrow-down">Ver lojas e horários</Botao>
       </div>
-    </section>
+      <Orcamento slot="lado" modo="exame" />
+    </HeroPagina>
 
-    <Barrado>Já tem receita? Mande a foto no WhatsApp e receba o orçamento.</Barrado>
+    <Secao titulo="Como pedir o orçamento">
+      <ComoFunciona />
+      <p class="apoio">
+        Ainda não tem receita? <a href="#exame">Faça o exame de vista na loja</a>. Ele é gratuito na compra dos
+        óculos.
+      </p>
+    </Secao>
 
-    <section class="secao" aria-labelledby="h-como">
-      <div class="envoltorio pilha">
-        <h2 id="h-como">Como pedir o orçamento</h2>
-        <ComoFunciona />
-        <p class="apoio">
-          Ainda não tem receita? <a href="#exame">Faça o exame de vista na loja</a>. Ele é gratuito na compra dos
-          óculos.
-        </p>
+    <Secao
+      id="exame"
+      campo="fachada"
+      titulo="Sábado na Caju e na Pinheiro. Sexta na Baixa."
+      lead="O exame de vista é gratuito na compra dos óculos. Na Caju é por ordem de chegada. Na Pinheiro e na Baixa do Sapateiro, com horário marcado pelo WhatsApp."
+    >
+      <AgendaExames />
+      <div>
+        <Botao href={`${base}/exame-de-vista/`} variante="linha-clara" iconeFim="arrow-right">Tudo sobre o exame</Botao>
       </div>
-    </section>
+    </Secao>
 
-    <section class="secao campo-fachada exame" id="exame" aria-labelledby="h-exame">
-      <div class="envoltorio pilha">
-        <h2 id="h-exame">Sábado na Caju e na Pinheiro. Sexta na Baixa.</h2>
-        <p class="lead">
-          O exame de vista é gratuito na compra dos óculos. Na Caju é por ordem de chegada. Na Pinheiro e na Baixa do
-          Sapateiro, com horário marcado pelo WhatsApp.
-        </p>
-        <AgendaExames />
-        <div>
-          <Botao href={`${base}/exame-de-vista/`} variante="linha-clara" iconeFim="arrow-right">Tudo sobre o exame</Botao>
-        </div>
+    <Secao id="lojas" titulo="As três lojas" lead="Cada loja tem horário e WhatsApp próprios. O selo mostra se ela está aberta agora.">
+      <div class="lojas">
+        {unidades.map((u) => <CartaoUnidade unidade={u} />)}
       </div>
-    </section>
-
-    <section class="secao" id="lojas" aria-labelledby="h-lojas">
-      <div class="envoltorio pilha">
-        <h2 id="h-lojas">As três lojas</h2>
-        <p class="lead">Cada loja tem horário e WhatsApp próprios. O selo mostra se ela está aberta agora.</p>
-        <div class="lojas">
-          {unidades.map((u) => <CartaoUnidade unidade={u} />)}
-        </div>
-      </div>
-    </section>
+    </Secao>
 
     <Barrado />
 
-    <section class="secao" aria-labelledby="h-marcas">
-      <div class="envoltorio pilha">
-        <h2 id="h-marcas">Marcas que você encontra na Girêh</h2>
-        <Marcas />
-        <div>
-          <Botao href={`${base}/oculos-e-lentes/`} variante="linha" iconeFim="arrow-right">Óculos e lentes</Botao>
-        </div>
+    <Secao titulo="Marcas que você encontra na Girêh">
+      <Marcas />
+      <div>
+        <Botao href={`${base}/oculos-e-lentes/`} variante="linha" iconeFim="arrow-right">Óculos e lentes</Botao>
       </div>
-    </section>
+    </Secao>
 
-    <section class="secao" aria-labelledby="h-fotos">
-      <div class="envoltorio pilha">
-        <h2 id="h-fotos">Na loja</h2>
-        <div class="fotos">
-          <EspacoImagem codigo="F04" descricao="Equipe atendendo no balcão" proporcao="livre" class="f-grande" />
-          <EspacoImagem codigo="F09" descricao="Expositor de armações na parede" proporcao="livre" class="f-peq" />
-          <EspacoImagem codigo="F01" descricao="Fachada da Girêh Caju, de frente, de dia" proporcao="livre" class="f-peq" />
-        </div>
+    <Secao titulo="Na loja">
+      <div class="fotos">
+        <EspacoImagem codigo="F04" descricao="Equipe atendendo no balcão" proporcao="livre" class="f-grande" />
+        <EspacoImagem codigo="F09" descricao="Expositor de armações na parede" proporcao="livre" class="f-peq" />
+        <EspacoImagem codigo="F01" descricao="Fachada da Girêh Caju, de frente, de dia" proporcao="livre" class="f-peq" />
       </div>
-    </section>
+    </Secao>
 
-    <section class="secao insta campo-fachada" aria-labelledby="h-insta">
-      <div class="envoltorio insta-grade">
+    <Secao campo="fachada" class="insta">
+      <div class="insta-grade">
         <div>
-          <h2 id="h-insta">Novidades no Instagram</h2>
+          <h2>Novidades no Instagram</h2>
           <p class="insta-sub">Lançamentos, promoções e o dia a dia das lojas.</p>
         </div>
         <ul class="insta-links" role="list">
@@ -129,7 +105,7 @@ const jsonld = {
           }
         </ul>
       </div>
-    </section>
+    </Secao>
   </main>
 
   <Rodape />
@@ -137,87 +113,10 @@ const jsonld = {
 </Base>
 
 <style>
-  .hero {
-    background: var(--azul-fachada);
-    color: var(--branco-esmalte);
-    padding: var(--e-7) 0 var(--e-8);
-  }
-  .hero-grade {
-    display: grid;
-    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
-    gap: var(--e-7);
-    align-items: center;
-  }
-  .hero-texto {
-    display: grid;
-    gap: var(--e-5);
-  }
-  .frase {
-    display: block;
-  }
-  .frase + .frase {
-    color: var(--azul-claro);
-  }
-  .hero-sub {
-    max-width: 40ch;
-    font-size: var(--fs-corpo-g);
-    color: var(--texto-2-escuro);
-  }
-  .hero-acoes {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--e-3);
-  }
-  .hero-piso {
-    width: 100%;
-    max-width: 36rem;
-    justify-self: end;
-  }
   @media (max-width: 56rem) {
-    .hero {
-      padding: var(--e-6) 0 var(--e-7);
-    }
-    .hero-grade {
-      grid-template-columns: minmax(0, 1fr);
-      gap: var(--e-6);
-    }
-    .hero-piso {
-      justify-self: stretch;
-      max-width: none;
-    }
-    .hero-acoes {
+    .so-desktop {
       display: none;
     }
-  }
-
-  .secao {
-    padding: var(--e-9) 0;
-  }
-  @media (max-width: 48rem) {
-    .secao {
-      padding: var(--e-8) 0;
-    }
-  }
-  .exame {
-    background: var(--azul-fachada);
-    color: var(--branco-esmalte);
-  }
-  .exame .lead {
-    color: var(--texto-2-escuro);
-  }
-  .pilha {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--e-5);
-  }
-  .pilha > h2 {
-    max-width: 22ch;
-  }
-  .lead {
-    max-width: var(--medida);
-    font-size: var(--fs-corpo-g);
-    color: var(--texto-2);
-    margin-top: calc(-1 * var(--e-2));
   }
   .apoio {
     font-size: var(--fs-corpo-g);
@@ -241,7 +140,6 @@ const jsonld = {
   .fotos {
     display: grid;
     grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
-    grid-template-rows: auto auto;
     gap: var(--rejunte-w);
     padding: var(--rejunte-w);
     background: var(--rejunte);
@@ -271,11 +169,6 @@ const jsonld = {
     }
   }
 
-  .insta {
-    background: var(--azul-fachada);
-    color: var(--branco-esmalte);
-    padding: var(--e-8) 0;
-  }
   .insta-grade {
     display: flex;
     flex-wrap: wrap;
