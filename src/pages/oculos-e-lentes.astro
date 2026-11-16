@@ -1,0 +1,118 @@
+---
+import Base from "../layouts/Base.astro";
+import Cabecalho from "../components/Cabecalho.astro";
+import Rodape from "../components/Rodape.astro";
+import BarraAcao from "../components/BarraAcao.astro";
+import Barrado from "../components/Barrado.astro";
+import Botao from "../components/Botao.astro";
+import HeroPagina from "../components/HeroPagina.astro";
+import Secao from "../components/Secao.astro";
+import Marcas from "../components/Marcas.astro";
+import Ladrilho from "../components/Ladrilho.astro";
+import Armacoes from "../components/oculos/Armacoes.astro";
+import Tratamentos from "../components/oculos/Tratamentos.astro";
+import Lentes from "../components/oculos/Lentes.astro";
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+
+<Base
+  titulo="Óculos e lentes · Ótica Girêh"
+  descricao="Armação de metal, balgriff, fio de nylon e acetato. Lente com antirreflexo, blue filter ou que escurece no sol. No Caju e na Maré: mande a receita no WhatsApp."
+>
+  <Cabecalho atual="oculos" />
+
+  <main>
+    <HeroPagina
+      frases={["Armação e lente", "do jeito da sua receita."]}
+      sub="Os tipos de armação e de lente que a Girêh faz, explicados sem complicação."
+      faixa="Mande a foto da receita no WhatsApp e receba as opções."
+    >
+      <div slot="acoes">
+        <Botao href="#lentes" variante="linha-clara" iconeFim="arrow-down">Ver as lentes</Botao>
+      </div>
+      <div slot="lado" class="piso-hero" aria-hidden="true">
+        <Ladrilho padrao="lente" tom="esmalte" />
+        <Ladrilho padrao="lente" tom="claro" giro={90} />
+        <Ladrilho padrao="lente" tom="claro" giro={270} />
+        <Ladrilho padrao="lente" tom="esmalte" giro={180} />
+      </div>
+    </HeroPagina>
+
+    <Secao
+      titulo="Quatro tipos de armação"
+      lead="O que muda é como a lente fica presa. Na loja você experimenta cada uma."
+    >
+      <Armacoes />
+    </Secao>
+
+    <Secao
+      id="lentes"
+      campo="fachada"
+      titulo="Tratamentos de lente"
+      lead="Cada tratamento resolve uma coisa. Dá para escolher um só ou juntar mais de um na mesma lente."
+    >
+      <Tratamentos />
+    </Secao>
+
+    <Secao titulo="Tipos de lente e combinações" lead="O tipo de lente segue a sua receita. Os tratamentos vêm por cima.">
+      <Lentes />
+    </Secao>
+
+    <Barrado />
+
+    <Secao titulo="Marcas que você encontra na Girêh">
+      <Marcas />
+    </Secao>
+
+    <Secao
+      campo="fachada"
+      titulo="Mande a receita e receba as opções"
+      lead="Escolha a loja e mande a foto da receita no WhatsApp. A gente responde com as opções de lente e armação e o valor de cada uma."
+      semBarra
+    >
+      <div class="fecho-acoes">
+        <Botao href={`${base}/#lojas`} icone="brand-whatsapp" iconeFim="arrow-right">Pedir orçamento</Botao>
+      </div>
+      <p class="fecho-nota">
+        Ainda não tem receita? <a href={`${base}/exame-de-vista/`}>Faça o exame de vista na loja</a>. Ele é gratuito na
+        compra dos óculos.
+      </p>
+    </Secao>
+  </main>
+
+  <Rodape />
+  <BarraAcao />
+</Base>
+
+<style>
+  .piso-hero {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--rejunte-w);
+    padding: var(--rejunte-w);
+    background: var(--azul-meio);
+    max-width: 24rem;
+    margin-inline-start: auto;
+  }
+  @media (max-width: 56rem) {
+    .piso-hero {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      max-width: none;
+      margin-inline-start: 0;
+    }
+  }
+  .fecho-acoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--e-3);
+  }
+  .fecho-nota {
+    font-size: var(--fs-corpo-g);
+    color: var(--texto-2-escuro);
+  }
+  .fecho-nota a {
+    color: var(--branco-esmalte);
+    font-weight: 700;
+  }
+</style>

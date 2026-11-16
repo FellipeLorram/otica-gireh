@@ -1,0 +1,128 @@
+---
+/**
+ * Desenho de linha de um tipo de armação, visto de frente.
+ * Traço azul-noite de 2px; a lente leva só um véu de azul-névoa.
+ * Todas usam a mesma lente, para a diferença ficar na construção:
+ * metal = aro fino; balgriff = sem aro, com parafusos; nylon = aro em cima e fio embaixo;
+ * acetato = aro grosso (contorno duplo).
+ */
+import type { TipoArmacao } from "../../data/oculos";
+interface Props {
+  tipo: TipoArmacao;
+}
+const { tipo } = Astro.props;
+
+// Lente: retângulo de cantos macios. Esquerda em x 30..110, direita em x 130..210, y 24..78.
+const lente = (x: number) => `M${x} 40 Q${x} 24 ${x + 16} 24 H${x + 64} Q${x + 80} 24 ${x + 80} 40 V62 Q${x + 80} 78 ${x + 64} 78 H${x + 16} Q${x} 78 ${x} 62 Z`;
+const metadeCima = (x: number) => `M${x} 51 V40 Q${x} 24 ${x + 16} 24 H${x + 64} Q${x + 80} 24 ${x + 80} 40 V51`;
+const metadeBaixo = (x: number) => `M${x} 51 V62 Q${x} 78 ${x + 16} 78 H${x + 64} Q${x + 80} 78 ${x + 80} 62 V51`;
+---
+
+<svg class="desenho" viewBox="0 0 240 100" aria-hidden="true" focusable="false">
+  <g class="vidro">
+    <path d={lente(30)} />
+    <path d={lente(130)} />
+  </g>
+
+  {
+    tipo === "metal" && (
+      <g class="traco">
+        <path d={lente(30)} />
+        <path d={lente(130)} />
+        {/* ponte dupla de metal */}
+        <path d="M110 38 Q120 30 130 38" />
+        <path d="M104 25 Q120 19 136 25" />
+        {/* plaquetas */}
+        <path d="M108 50 L103 56" />
+        <ellipse cx="101" cy="61" rx="3" ry="5" />
+        <path d="M132 50 L137 56" />
+        <ellipse cx="139" cy="61" rx="3" ry="5" />
+        {/* hastes */}
+        <path d="M30 36 H22 L6 34" />
+        <path d="M210 36 H218 L234 34" />
+      </g>
+    )
+  }
+
+  {
+    tipo === "balgriff" && (
+      <g class="traco">
+        <path d={lente(30)} class="borda-solta" />
+        <path d={lente(130)} class="borda-solta" />
+        {/* ponte presa nas lentes por parafusos */}
+        <path d="M102 38 H108 Q120 30 132 38 H138" />
+        <circle cx="102" cy="38" r="3.5" />
+        <circle cx="138" cy="38" r="3.5" />
+        <path d="M110 46 L104 56" />
+        <path d="M130 46 L136 56" />
+        {/* hastes presas por parafusos */}
+        <path d="M38 36 H24 L6 34" />
+        <circle cx="38" cy="36" r="3.5" />
+        <path d="M202 36 H216 L234 34" />
+        <circle cx="202" cy="36" r="3.5" />
+      </g>
+    )
+  }
+
+  {
+    tipo === "nylon" && (
+      <g class="traco">
+        {/* aro de cima, encorpado */}
+        <path d={metadeCima(30)} />
+        <path d="M34 51 V41 Q34 28 47 28 H93 Q106 28 106 41 V51" />
+        <path d="M30 51 H34 M106 51 H110" />
+        <path d={metadeCima(130)} />
+        <path d="M134 51 V41 Q134 28 147 28 H193 Q206 28 206 41 V51" />
+        <path d="M130 51 H134 M206 51 H210" />
+        {/* o fio de nylon embaixo */}
+        <path d={metadeBaixo(30)} />
+        <path d={metadeBaixo(130)} />
+        {/* ponte e hastes */}
+        <path d="M110 36 Q120 29 130 36" />
+        <path d="M30 34 H22 L6 32" />
+        <path d="M210 34 H218 L234 32" />
+      </g>
+    )
+  }
+
+  {
+    tipo === "acetato" && (
+      <g class="traco">
+        {/* aro grosso: contorno de fora e de dentro */}
+        <path d="M22 38 Q22 16 44 16 H96 Q116 16 116 36 V64 Q116 86 96 86 H44 Q22 86 22 64 Z" />
+        <path d={lente(30)} />
+        <path d="M124 36 Q124 16 144 16 H196 Q218 16 218 38 V64 Q218 86 196 86 H144 Q124 86 124 64 Z" />
+        <path d={lente(130)} />
+        {/* ponte larga */}
+        <path d="M116 30 Q120 27 124 30 M116 44 Q120 39 124 44" />
+        {/* hastes grossas */}
+        <path d="M22 26 H6 M22 34 H6" />
+        <path d="M218 26 H234 M218 34 H234" />
+      </g>
+    )
+  }
+</svg>
+
+<style>
+  .desenho {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+  .vidro path {
+    fill: var(--azul-nevoa);
+    stroke: none;
+  }
+  .traco {
+    fill: none;
+    stroke: var(--azul-noite);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+  }
+  .borda-solta {
+    stroke: var(--azul-meio);
+    stroke-dasharray: 5 5;
+  }
+</style>
